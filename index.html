@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Çatı Katı ve Kedi Kurtarma Bulmacası</title>
+    <title>Çatı Katı Kurtarma Bulmacası</title>
     <style>
         :root {
             --bg-color: #f4f7f6;
@@ -96,6 +96,18 @@
             --accent-color: #e11d48;
             --roof-bg: #4c0519;
         }
+        /* Yeni Sıcak Teması */
+        .theme-hot {
+            --bg-color: #7c2d12;
+            --panel-bg: #292524;
+            --text-color: #fca5a5;
+            --border-color: #f97316;
+            --inner-wall: #b45309;
+            --ladder-color: #f59e0b;
+            --door-color: #ffff00;
+            --accent-color: #ef4444;
+            --roof-bg: #fdba74;
+        }
 
         * {
             box-sizing: border-box;
@@ -163,6 +175,7 @@
 
         .clothesline { position: absolute; bottom: 20px; left: 10%; width: 80%; height: 2px; background-color: #475569; }
         .clothing { position: absolute; bottom: 5px; font-size: 20px; }
+        .roof-target { position: absolute; bottom: 10px; font-size: 28px; z-index: 5; }
 
         .building-grid {
             display: grid;
@@ -299,6 +312,7 @@
                 <div class="clothing" style="left: 20%;">👕</div>
                 <div class="clothing" style="left: 45%;">👗</div>
                 <div class="clothing" style="left: 70%;">🎽</div>
+                <div class="roof-target" id="roof-grandpa" style="display:none; left: 45%;">👴🔥</div>
             </div>
 
             <div class="building-grid" id="grid"></div>
@@ -356,7 +370,7 @@
     <script>
         const levels = [
             {
-                name: "1. Kat: Yağmurlu Çatı Katı", task: "Görev: Yukarı tırman, kıyafetleri kurtar!", theme: "default",
+                name: "1. Kat: Yağmurlu Çatı Katı", task: "Görev: Yukarı tırman, kıyafetleri kurtar!", theme: "default", type: "roof",
                 start: { r: 3, c: 3 }, target: { r: -1, c: 0 },
                 grid: [
                     [{ up: true, down: false, left: false, right: true },  { up: false, down: false, left: true, right: true },   { up: false, down: true, left: true, right: false },   { up: false, down: false, left: false, right: false }],
@@ -366,7 +380,7 @@
                 ]
             },
             {
-                name: "2. Kat: Gizemli Gece", task: "Görev: Yukarı tırman, kıyafetleri kurtar!", theme: "night",
+                name: "2. Kat: Gizemli Gece", task: "Görev: Yukarı tırman, kıyafetleri kurtar!", theme: "night", type: "roof",
                 start: { r: 3, c: 0 }, target: { r: -1, c: 2 },
                 grid: [
                     [{ up: false, down: true, left: false, right: true },  { up: false, down: false, left: true, right: false },   { up: true, down: true, left: false, right: true },   { up: false, down: false, left: true, right: false }],
@@ -376,7 +390,7 @@
                 ]
             },
             {
-                name: "3. Kat: Siber Gelecek Kulesi", task: "Görev: Çatı kapısını hackle ve yukarı sız!", theme: "cyber",
+                name: "3. Kat: Siber Gelecek Kulesi", task: "Görev: Çatı kapısını hackle ve yukarı sız!", theme: "cyber", type: "roof",
                 start: { r: 3, c: 3 }, target: { r: -1, c: 3 },
                 grid: [
                     [{ up: false, down: true, left: false, right: true },   { up: false, down: false, left: true, right: true },   { up: false, down: true, left: true, right: true },   { up: true, down: false, left: true, right: false }],
@@ -386,7 +400,7 @@
                 ]
             },
             {
-                name: "4. Kat: Su Baskını - Giriş", task: "⚠️ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood1",
+                name: "4. Kat: Su Baskını - Giriş", task: "⚠️ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood1", type: "basement",
                 start: { r: -1, c: 0 }, target: { r: 4, c: 3 },
                 grid: [
                     [{ up: true, down: true, left: false, right: true },   { up: false, down: true, left: true, right: false },   { up: false, down: true, left: false, right: true },   { up: false, down: false, left: true, right: false }],
@@ -396,7 +410,7 @@
                 ]
             },
             {
-                name: "5. Kat: Antik Su Sarnıcı", task: "⚠️ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood2",
+                name: "5. Kat: Antik Su Sarnıcı", task: "⚠️ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood2", type: "basement",
                 start: { r: -1, c: 2 }, target: { r: 4, c: 0 },
                 grid: [
                     [{ up: false, down: true, left: false, right: true },  { up: false, down: true, left: true, right: true },    { up: true, down: true, left: true, right: false },   { up: false, down: false, left: false, right: false }],
@@ -406,7 +420,7 @@
                 ]
             },
             {
-                name: "6. Kat: Sualtı Laboratuvarı", task: "⚠️ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood3",
+                name: "6. Kat: Sualtı Laboratuvarı", task: "⚠️ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood3", type: "basement",
                 start: { r: -1, c: 1 }, target: { r: 4, c: 2 },
                 grid: [
                     [{ up: false, down: true, left: false, right: true },  { up: true, down: true, left: true, right: false },    { up: false, down: true, left: false, right: true },   { up: false, down: true, left: true, right: false }],
@@ -416,7 +430,7 @@
                 ]
             },
             {
-                name: "7. Kat: Batık Şehir Metrosu", task: "⚠️ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood4",
+                name: "7. Kat: Batık Şehir Metrosu", task: "⚠️ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood4", type: "basement",
                 start: { r: -1, c: 3 }, target: { r: 4, c: 1 },
                 grid: [
                     [{ up: false, down: true, left: false, right: true },  { up: false, down: true, left: true, right: false },   { up: false, down: true, left: false, right: true },   { up: true, down: true, left: true, right: false }],
@@ -426,8 +440,38 @@
                 ]
             },
             {
-                name: "8. Kat: Büyük Okyanus Sığınağı (FİNAL)", task: "⚠️ FİNAL: Kilitli kapıyı kır ve yavru kediyi kurtar!", theme: "flood5",
+                name: "8. Kat: Büyük Okyanus Sığınağı", task: "⚠️ Görev: Labirenti geç ve güvenli bölgeye sız!", theme: "flood5", type: "basement",
                 start: { r: -1, c: 0 }, target: { r: 4, c: 3 },
+                grid: [
+                    [{ up: true, down: true, left: true, right: true },   { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true }],
+                    [{ up: true, down: true, left: true, right: true },   { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true }],
+                    [{ up: true, down: true, left: true, right: true },   { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true }],
+                    [{ up: true, down: true, left: true, right: true },   { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true }]
+                ]
+            },
+            {
+                name: "9. Kat: Termometrenin Yükselişi", task: "🥵 GÖREV: Çatı katındaki dede sıcaktan bunaldı, yukarı tırman!", theme: "hot", type: "grandpa",
+                start: { r: 3, c: 0 }, target: { r: -1, c: 2 },
+                grid: [
+                    [{ up: false, down: true, left: false, right: true },  { up: false, down: false, left: true, right: true },  { up: true, down: true, left: true, right: false },   { up: false, down: false, left: false, right: false }],
+                    [{ up: true, down: false, left: false, right: true },  { up: false, down: true, left: true, right: false },  { up: true, down: false, left: false, right: true },  { up: false, down: true, left: true, right: false }],
+                    [{ up: false, down: true, left: false, right: false }, { up: true, down: true, left: false, right: true },   { up: false, down: true, left: true, right: true },   { up: true, down: false, left: true, right: false }],
+                    [{ up: true, down: false, left: false, right: true },  { up: true, down: false, left: true, right: false },  { up: true, down: false, left: false, right: true },  { up: false, down: false, left: true, right: false }]
+                ]
+            },
+            {
+                name: "10. Kat: Betonerme Çölü", task: "🥵 GÖREV: Klima bozuldu! Dedeye ulaşmak için engelleri aş!", theme: "hot", type: "grandpa",
+                start: { r: 3, c: 2 }, target: { r: -1, c: 1 },
+                grid: [
+                    [{ up: false, down: true, left: false, right: true },  { up: true, down: true, left: true, right: false },   { up: false, down: true, left: false, right: true },  { up: false, down: false, left: true, right: false }],
+                    [{ up: true, down: true, left: false, right: false },  { up: true, down: false, left: false, right: true },  { up: true, down: false, left: true, right: true },   { up: false, down: true, left: true, right: false }],
+                    [{ up: true, down: false, left: false, right: true },  { false: false, down: true, left: true, right: false }, { up: false, down: true, left: false, right: true },  { up: true, down: true, left: true, right: false }],
+                    [{ up: false, down: false, left: false, right: true }, { up: true, down: false, left: true, right: true },   { up: true, down: false, left: true, right: false },  { up: true, down: false, left: false, right: false }]
+                ]
+            },
+            {
+                name: "11. Kat: Kavurucu Sıcaklar (FİNAL)", task: "🔥 FİNAL GÖREVİ: Şifreyi kır, çatı kapısını aç ve dedeyi serinlet!", theme: "hot", type: "grandpa",
+                start: { r: 3, c: 3 }, target: { r: -1, c: 2 },
                 grid: [
                     [{ up: true, down: true, left: true, right: true },   { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true }],
                     [{ up: true, down: true, left: true, right: true },   { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true }],
@@ -451,6 +495,7 @@
         const basementEl = document.getElementById('basement');
         const kittenTargetEl = document.getElementById('kitten-target');
         const clotheslineEl = document.getElementById('clothesline');
+        const grandpaEl = document.getElementById('roof-grandpa');
 
         function initGame() {
             gridEl.innerHTML = '';
@@ -466,17 +511,28 @@
             document.body.className = '';
             if(lvl.theme !== 'default') document.body.classList.add('theme-' + lvl.theme);
 
-            if (lvl.target.r === -1) {
+            // Çatı / Bodrum Ayarları ve Görsel Yönetim
+            if (lvl.type === "roof" || lvl.type === "grandpa") {
                 basementEl.style.display = 'none';
-                clotheslineEl.style.display = 'block';
                 roofEl.style.borderBottomLeftRadius = '0';
                 roofEl.style.borderBottomRightRadius = '0';
                 gridEl.style.borderBottomLeftRadius = '16px';
                 gridEl.style.borderBottomRightRadius = '16px';
-                document.querySelectorAll('.clothing').forEach(c => c.style.display = 'block');
+                
+                if (lvl.type === "grandpa") {
+                    clotheslineEl.style.display = 'none';
+                    document.querySelectorAll('.clothing').forEach(c => c.style.display = 'none');
+                    grandpaEl.style.display = 'block';
+                    grandpaEl.style.left = `calc(${12.5 + (lvl.target.c * 25)}% - 20px)`;
+                } else {
+                    clotheslineEl.style.display = 'block';
+                    document.querySelectorAll('.clothing').forEach(c => c.style.display = 'block');
+                    grandpaEl.style.display = 'none';
+                }
             } else {
                 basementEl.style.display = 'block';
                 clotheslineEl.style.display = 'none';
+                grandpaEl.style.display = 'none';
                 document.querySelectorAll('.clothing').forEach(c => c.style.display = 'none');
                 gridEl.style.borderBottomLeftRadius = '0';
                 gridEl.style.borderBottomRightRadius = '0';
@@ -542,7 +598,7 @@
             if (pPos.r === lvl.target.r && pPos.c === lvl.target.c) {
                 renderPlayerAtFinal(lvl.target.r, lvl.target.c);
                 setTimeout(() => {
-                    if (currentLevel === 2 || currentLevel === 7) {
+                    if (currentLevel === 2 || currentLevel === 7 || currentLevel === 10) {
                         startLingoGame();
                     } else {
                         showWinModal(lvl);
@@ -593,6 +649,9 @@
             } else if (currentLevel === 7) {
                 word = "MİYAV";
                 hint = "Kafes Şifrelenmiş! Kediyi kurtarmak için 5 harfli şifreyi çözün.";
+            } else if (currentLevel === 10) {
+                word = "SICAK";
+                hint = "Güneş Paneli Kilidi! Dedeyi sıcaktan kurtarmak için 5 harfli şifreyi bulun.";
             }
 
             lingoSecretWord = word;
@@ -700,12 +759,16 @@
             const nextBtn = document.getElementById('next-btn');
 
             if (currentLevel === levels.length - 1) {
-                modalTitle.innerText = "🏆 EFSANEVİ KAHRAMAN! 🏆";
-                modalDesc.innerText = "Tüm şifreleri kırdın, sığınak kapısını açtın ve minik kediyi azgın sulardan tamamen kurtardın! Oyun başarıyla tamamlandı.";
+                modalTitle.innerText = "🏆 MUHTEŞEM ZAFER! 🏆";
+                modalDesc.innerText = "Tüm şifreleri kırdın, labirentleri aştın ve yaşlı dedeyi klimanın serinliğine ulaştırarak büyük kahraman oldun!";
                 nextBtn.innerText = "Baştan Başla";
             } else {
                 modalTitle.innerText = "Kilit Açıldı! 🎉";
-                modalDesc.innerText = lvl.target.r === -1 ? "Harika! Şifreyi kırarak çatı kapısını açtın!" : "Miyav! Başarıyla alt kata geçiş sağlandı.";
+                if(lvl.type === "grandpa") {
+                    modalDesc.innerText = "Harika! Yaşlı dedeyi kurtarma yolunda bir kat daha yaklaştın.";
+                } else {
+                    modalDesc.innerText = lvl.target.r === -1 ? "Harika! Yukarı çatı katına geçiş sağlandı!" : "Miyav! Başarıyla alt kata geçiş sağlandı.";
+                }
                 nextBtn.innerText = "Sonraki Seviye";
             }
             document.getElementById('winModal').style.display = 'flex';
