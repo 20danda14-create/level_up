@@ -247,10 +247,25 @@
         .tip { margin-top: 8px; font-size: 11px; opacity: 0.7; }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 100; }
-        .modal-content { background: white; padding: 25px; border-radius: 20px; text-align: center; max-width: 340px; color: #1e293b; }
-        .modal h2 { color: #10b981; margin-bottom: 8px; font-size: 20px; }
-        .modal p { margin-bottom: 18px; font-size: 14px; }
-        .modal button { padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .modal-content { background: var(--panel-bg); color: var(--text-color); padding: 25px; border-radius: 20px; text-align: center; max-width: 360px; width: 100%; border: 3px solid var(--border-color); }
+        .modal h2, .modal h3 { color: #10b981; margin-bottom: 8px; font-size: 20px; }
+        .modal p { margin-bottom: 15px; font-size: 14px; }
+        .modal button { padding: 10px 20px; background: var(--accent-color); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+        /* Lingo Grid Tasarımı */
+        .lingo-box {
+            width: 42px; height: 42px; border: 2px solid var(--border-color);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 18px; border-radius: 6px;
+            text-transform: uppercase; color: var(--text-color); background: transparent;
+            transition: all 0.2s ease;
+        }
+        .lingo-input-style {
+            width: 100%; padding: 12px; text-align: center; font-size: 20px;
+            text-transform: uppercase; letter-spacing: 6px; border: 2px solid var(--border-color);
+            border-radius: 10px; margin-bottom: 10px; background: rgba(0,0,0,0.04);
+            color: var(--text-color); outline: none; font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -312,6 +327,19 @@
         </div>
     </div>
 
+    <div class="modal" id="lingoModal">
+        <div class="modal-content">
+            <h3>🔐 Şifreli Elektronik Kilit</h3>
+            <p id="lingo-hint" style="font-weight: 600; font-size:13px; color: #ef4444; margin-top:5px;"></p>
+            
+            <div id="lingo-grid" style="display: flex; flex-direction: column; gap: 5px; align-items: center; margin: 15px 0;"></div>
+            
+            <input type="text" id="lingo-input" class="lingo-input-style" autocomplete="off" onkeydown="if(event.key === 'Enter') checkLingoGuess()">
+            <button class="btn-sys primary" style="width:100%; padding: 12px;" onclick="checkLingoGuess()">Şifreyi Gönder</button>
+            <p id="lingo-error" style="color: #ef4444; font-size: 12px; margin-top: 8px; font-weight: bold;"></p>
+        </div>
+    </div>
+
     <script>
         const levels = [
             {
@@ -335,7 +363,7 @@
                 ]
             },
             {
-                name: "3. Kat: Siber Gelecek Kulesi", task: "Görev: Yukarı tırman, kıyafetleri kurtar!", theme: "cyber",
+                name: "3. Kat: Siber Gelecek Kulesi", task: "Görev: Çatı kapısını hackle ve yukarı sız!", theme: "cyber",
                 start: { r: 3, c: 3 }, target: { r: -1, c: 3 },
                 grid: [
                     [{ up: false, down: false, left: false, right: false }, { up: false, down: false, left: false, right: false }, { up: false, down: true, left: false, right: true },  { up: true, down: false, left: true, right: false }],
@@ -385,8 +413,7 @@
                 ]
             },
             {
-                // SEVİYE 8 TAMAMEN YENİLENDİ VE ÇÖZÜLEBİLİR HALE GETİRİLDİ
-                name: "8. Kat: Büyük Okyanus Sığınağı (FİNAL)", task: "⚠️ FİNAL: En dipten yavru kediyi hemen çıkart!", theme: "flood5",
+                name: "8. Kat: Büyük Okyanus Sığınağı (FİNAL)", task: "⚠️ FİNAL: Kilitli kapıyı kır ve yavru kediyi kurtar!", theme: "flood5",
                 start: { r: -1, c: 0 }, target: { r: 4, c: 3 },
                 grid: [
                     [{ up: true, down: false, left: false, right: true },  { up: false, down: false, left: true, right: true },   { up: false, down: false, left: true, right: true },  { up: false, down: true, left: true, right: false }],
@@ -400,6 +427,11 @@
         let currentLevel = 0;
         let moveCount = 0;
         let pPos = { r: 0, c: 0 };
+
+        // Lingo Değişkenleri
+        let lingoSecretWord = "";
+        let lingoAttempts = 0;
+        const maxLingoAttempts = 5;
 
         const gridEl = document.getElementById('grid');
         const playerEl = document.getElementById('player');
@@ -495,10 +527,16 @@
         function updatePlayerPosition() {
             const lvl = levels[currentLevel];
 
+            // KAZANMA DURUMU KONTROLÜ
             if (pPos.r === lvl.target.r && pPos.c === lvl.target.c) {
                 renderPlayerAtFinal(lvl.target.r, lvl.target.c);
                 setTimeout(() => {
-                    showWinModal(lvl);
+                    // Eğer 3. seviye (index 2) veya 8. seviye (index 7) bittiyse Lingo Challenge'ı tetikle
+                    if (currentLevel === 2 || currentLevel === 7) {
+                        startLingoGame();
+                    } else {
+                        showWinModal(lvl);
+                    }
                 }, 180);
                 return;
             }
@@ -535,24 +573,145 @@
             }
         }
 
+        // --- LINGO (KELİME BULMA) SİSTEMİ ---
+        function startLingoGame() {
+            let word = "";
+            let hint = "";
+            
+            if (currentLevel === 2) {
+                word = "ÇATI";
+                hint = "Çatı katı kapısı kilitlendi! Açmak için 4 harfli şifreyi bulun.";
+            } else if (currentLevel === 7) {
+                word = "MİYAV";
+                hint = "Kafes Şifrelenmiş! Kediyi kurtarmak için 5 harfli şifreyi çözün.";
+            }
+
+            lingoSecretWord = word;
+            lingoAttempts = 0;
+
+            document.getElementById('lingo-hint').innerText = hint;
+            document.getElementById('lingo-error').innerText = "";
+            
+            const inputEl = document.getElementById('lingo-input');
+            inputEl.value = "";
+            inputEl.maxLength = word.length;
+
+            // Izgarayı Oluştur
+            const gridEl = document.getElementById('lingo-grid');
+            gridEl.innerHTML = "";
+            for (let i = 0; i < maxLingoAttempts; i++) {
+                const row = document.createElement('div');
+                row.style.display = 'flex';
+                row.style.gap = '5px';
+                for (let j = 0; j < word.length; j++) {
+                    const box = document.createElement('div');
+                    box.className = 'lingo-box';
+                    box.id = `l-box-${i}-${j}`;
+                    row.appendChild(box);
+                }
+                gridEl.appendChild(row);
+            }
+
+            document.getElementById('lingoModal').style.display = 'flex';
+            setTimeout(() => inputEl.focus(), 50);
+        }
+
+        function checkLingoGuess() {
+            const inputEl = document.getElementById('lingo-input');
+            const errorEl = document.getElementById('lingo-error');
+            let guess = inputEl.value.toLocaleUpperCase('tr-TR').trim();
+
+            if (guess.length !== lingoSecretWord.length) {
+                errorEl.innerText = `Hata: Şifre tam olarak ${lingoSecretWord.length} harfli olmalı!`;
+                return;
+            }
+            errorEl.innerText = "";
+
+            let secretArr = lingoSecretWord.split('');
+            let guessArr = guess.split('');
+            let rowIdx = lingoAttempts;
+            let statuses = Array(lingoSecretWord.length).fill('gray');
+
+            // 1. Aşama: Tam eşleşmeler (Yeşil)
+            for (let i = 0; i < lingoSecretWord.length; i++) {
+                if (guessArr[i] === secretArr[i]) {
+                    statuses[i] = 'green';
+                    secretArr[i] = null;
+                    guessArr[i] = null;
+                }
+            }
+
+            // 2. Aşama: Yanlış yerdeki harfler (Sarı)
+            for (let i = 0; i < lingoSecretWord.length; i++) {
+                if (guessArr[i] !== null) {
+                    let sIdx = secretArr.indexOf(guessArr[i]);
+                    if (sIdx !== -1) {
+                        statuses[i] = 'yellow';
+                        secretArr[sIdx] = null;
+                    }
+                }
+            }
+
+            // Renklendirme ve Ekrana Basma
+            for (let i = 0; i < lingoSecretWord.length; i++) {
+                const box = document.getElementById(`l-box-${rowIdx}-${i}`);
+                box.innerText = guess[i];
+                box.style.color = '#ffffff';
+                if (statuses[i] === 'green') {
+                    box.style.backgroundColor = '#10b981';
+                    box.style.borderColor = '#10b981';
+                } else if (statuses[i] === 'yellow') {
+                    box.style.backgroundColor = '#eab308';
+                    box.style.borderColor = '#eab308';
+                } else {
+                    box.style.backgroundColor = '#64748b';
+                    box.style.borderColor = '#64748b';
+                }
+            }
+
+            lingoAttempts++;
+            inputEl.value = "";
+            inputEl.focus();
+
+            // Doğru Tahmin Mi?
+            if (guess === lingoSecretWord) {
+                setTimeout(() => {
+                    document.getElementById('lingoModal').style.display = 'none';
+                    showWinModal(levels[currentLevel]);
+                }, 600);
+                return;
+            }
+
+            // Haklar Bittiyse Sıfırla
+            if (lingoAttempts >= maxLingoAttempts) {
+                errorEl.innerText = "Sistem Bloke Oldu! Şifre Modülü Yeniden Başlatılıyor...";
+                setTimeout(() => {
+                    startLingoGame();
+                }, 2000);
+            }
+        }
+
         function showWinModal(lvl) {
             const modalTitle = document.getElementById('modal-title');
             const modalDesc = document.getElementById('modal-desc');
             const nextBtn = document.getElementById('next-btn');
 
             if (currentLevel === levels.length - 1) {
-                modalTitle.innerText = "KAHRAMAN OLDUN! 🏆";
-                modalDesc.innerText = "Tüm kuleleri geçtin, kıyafetleri kuruttun ve kediciği azgın sulardan sağ salim kurtardın!";
+                modalTitle.innerText = "🏆 EFSANEVİ KAHRAMAN! 🏆";
+                modalDesc.innerText = "Tüm şifreleri kırdın, sığınak kapısını açtın ve minik kediyi azgın sulardan tamamen kurtardın! Oyun başarıyla tamamlandı.";
                 nextBtn.innerText = "Baştan Başla";
             } else {
-                modalTitle.innerText = "Harika İş! 🎉";
-                modalDesc.innerText = lvl.target.r === -1 ? "Kıyafetleri ıslanmaktan kurtardın!" : "Miyav! Yavru kediyi su basmadan kurtardın!";
+                modalTitle.innerText = "Kilit Açıldı! 🎉";
+                modalDesc.innerText = lvl.target.r === -1 ? "Harika! Şifreyi kırarak çatı kapısını açtın!" : "Miyav! Başarıyla alt kata geçiş sağlandı.";
                 nextBtn.innerText = "Sonraki Seviye";
             }
             document.getElementById('winModal').style.display = 'flex';
         }
 
         function move(dr, dc) {
+            // Eğer Lingo ekranı veya Kazanma Ekranı Açıksa Karakter Hareket Etmesin
+            if(document.getElementById('lingoModal').style.display === 'flex' || document.getElementById('winModal').style.display === 'flex') return;
+
             const lvl = levels[currentLevel];
             const tR = pPos.r + dr;
             const tC = pPos.c + dc;
@@ -601,9 +760,14 @@
 
         window.addEventListener('keydown', (e) => {
             if(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'w', 's', 'a', 'd', 'W', 'S', 'A', 'D'].includes(e.key)) {
-                e.preventDefault();
+                // Eğer oyuncu lingo kutusuna yazı yazmıyorsa varsayılan yön tuşu kaydırmalarını engelle
+                if(document.activeElement.id !== 'lingo-input') {
+                    e.preventDefault();
+                }
             }
             
+            if(document.getElementById('lingoModal').style.display === 'flex' || document.getElementById('winModal').style.display === 'flex') return;
+
             switch(e.key) {
                 case 'ArrowUp': case 'w': case 'W': move(-1, 0); break;
                 case 'ArrowDown': case 's': case 'S': move(1, 0); break;
@@ -621,6 +785,7 @@
         function resetLevel() { initGame(); }
         function skipLevel() {
             document.getElementById('winModal').style.display = 'none';
+            document.getElementById('lingoModal').style.display = 'none';
             currentLevel = (currentLevel + 1) % levels.length;
             initGame();
         }
