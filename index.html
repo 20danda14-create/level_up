@@ -1,775 +1,157 @@
+unu güncelleme
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Çatı Katı Kurtarma Bulmacası</title>
-    <style>
-        :root {
-            --bg-color: #f4f7f6;
-            --panel-bg: #ffffff;
-            --text-color: #2c3e50;
-            --border-color: #1e293b;
-            --inner-wall: #475569;
-            --ladder-color: #8a7355;
-            --door-color: #facc15;
-            --accent-color: #3b82f6;
-            --roof-bg: #bae6fd;
-        }
-
-       .theme-night {
-            --bg-color: #0f172a;
-            --panel-bg: #1e293b;
-            --text-color: #f8fafc;
-            --border-color: #f8fafc;
-            --inner-wall: #94a3b8;
-            --ladder-color: #fbbf24;
-            --door-color: #facc15;
-            --accent-color: #8b5cf6;
-            --roof-bg: #1e1b4b;
-        }
-
-       .theme-cyber {
-            --bg-color: #090514;
-            --panel-bg: #130924;
-            --text-color: #00ffcc;
-            --border-color: #ff007f;
-            --inner-wall: #ff007f;
-            --ladder-color: #00ffcc;
-            --door-color: #facc15;
-            --accent-color: #e0aaff;
-            --roof-bg: #030008;
-        }
-
-       .theme-flood1 { --bg-color: #0c4a6e; --panel-bg: #0f172a; --text-color: #38bdf8; --border-color: #38bdf8; --inner-wall: #0284c7; --ladder-color: #bae6fd; --door-color: #facc15; --accent-color: #0284c7; --roof-bg: #0f172a; }
-       .theme-flood2 { --bg-color: #064e3b; --panel-bg: #022c22; --text-color: #34d399; --border-color: #34d399; --inner-wall: #059669; --ladder-color: #a7f3d0; --door-color: #facc15; --accent-color: #059669; --roof-bg: #064e3b; }
-       .theme-flood3 { --bg-color: #1e1b4b; --panel-bg: #0f0e17; --text-color: #818cf8; --border-color: #818cf8; --inner-wall: #4f46e5; --ladder-color: #c7d2fe; --door-color: #facc15; --accent-color: #4f46e5; --roof-bg: #1e1b4b; }
-       .theme-flood4 { --bg-color: #451a03; --panel-bg: #1c1917; --text-color: #fb923c; --border-color: #fb923c; --inner-wall: #ea580c; --ladder-color: #ffedd5; --door-color: #facc15; --accent-color: #ea580c; --roof-bg: #451a03; }
-       .theme-flood5 { --bg-color: #4c0519; --panel-bg: #1c050e; --text-color: #f43f5e; --border-color: #f43f5e; --inner-wall: #e11d48; --ladder-color: #ffe4e6; --door-color: #facc15; --accent-color: #e11d48; --roof-bg: #4c0519; }
-       .theme-hot { --bg-color: #7c2d12; --panel-bg: #292524; --text-color: #fca5a5; --border-color: #f97316; --inner-wall: #b45309; --ladder-color: #f59e0b; --door-color: #facc15; --accent-color: #ef4444; --roof-bg: #fdba74; }
-
-        * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; padding: 0; user-select: none; }
-
-        body {
-            background: linear-gradient(135deg, var(--bg-color), #dbeafe);
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 15px;
-            transition: all 0.4s ease;
-        }
-
-       .game-container {
-            background-color: var(--panel-bg);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            padding: 20px;
-            max-width: 440px;
-            width: 100%;
-            text-align: center;
-            border: 4px solid var(--border-color);
-            outline: none;
-        }
-
-        header h1 { font-size: 20px; margin-bottom: 2px; font-weight: 700; }
-        header h2 { font-size: 12px; margin-bottom: 10px; opacity: 0.9; font-weight: 600; color: #ef4444; }
-
-       .game-status {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            font-size: 13px;
-            font-weight: bold;
-            background: rgba(0,0,0,0.06);
-            padding: 6px 12px;
-            border-radius: 8px;
-        }
-
-       .building-wrapper { position: relative; margin: 0 auto; width: 100%; cursor: pointer; }
-
-       .roof-section {
-            height: 80px;
-            background: linear-gradient(180deg, var(--roof-bg), rgba(0,0,0,0.05));
-            border: 4px solid var(--border-color);
-            border-bottom: none;
-            border-top-left-radius: 16px;
-            border-top-right-radius: 16px;
-            position: relative;
-            overflow: hidden;
-        }
-
-       .clothesline { position: absolute; bottom: 20px; left: 10%; width: 80%; height: 2px; background-color: #475569; }
-       .clothing { position: absolute; bottom: 5px; font-size: 20px; }
-       .roof-target { position: absolute; bottom: 10px; font-size: 28px; z-index: 5; }
-
-       .building-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(4, 85px);
-            border: 4px solid var(--border-color);
-            background-color: rgba(255,255,255,0.02);
-            position: relative;
-        }
-
-       .basement-section {
-            height: 75px;
-            background-color: #0284c7;
-            border: 4px solid var(--border-color);
-            border-top: none;
-            border-bottom-left-radius: 16px;
-            border-bottom-right-radius: 16px;
-            position: relative;
-            overflow: hidden;
-            display: none;
-        }
-
-       .water-wave {
-            position: absolute;
-            bottom: 0; left: 0; width: 200%; height: 100%;
-            background: linear-gradient(0deg, #0284c7 70%, #38bdf8 100%);
-            opacity: 0.8;
-            animation: wave 3s linear infinite;
-        }
-
-        @keyframes wave {
-            0% { transform: translateX(0) translateY(0); }
-            50% { transform: translateX(-25%) translateY(4px); }
-            100% { transform: translateX(-50%) translateY(0); }
-        }
-
-       .room { border: 2px solid var(--inner-wall); position: relative; display: flex; align-items: center; justify-content: center; }
-       .room.left-edge { border-left: 4px solid var(--border-color); }
-       .room.right-edge { border-right: 4px solid var(--border-color); }
-       .room.top-edge { border-top: 4px solid var(--border-color); }
-       .room.bottom-edge { border-bottom: 4px solid var(--border-color); }
-
-       .ladder {
-            position: absolute; width: 20px; height: 100%; left: 50%; transform: translateX(-50%);
-            background: repeating-linear-gradient(0deg, var(--ladder-color), var(--ladder-color) 5px, transparent 5px, transparent 12px);
-            border-left: 4px solid var(--ladder-color); border-right: 4px solid var(--ladder-color); z-index: 2;
-        }
-
-       .door { position: absolute; width: 12px; height: 45px; background-color: var(--door-color); bottom: 0; z-index: 3; border-radius: 4px 4px 0 0; }
-       .door.left { left: -6px; }
-       .door.right { right: -6px; }
-
-       .trapdoor { position: absolute; width: 34px; height: 8px; background: #0f172a; border: 2px solid #e2e8f0; border-radius: 4px; left: 50%; transform: translateX(-50%); z-index: 4; }
-       .trapdoor.top { top: -4px; }
-       .trapdoor.bottom { bottom: -4px; }
-
-       .target-marker { position: absolute; font-size: 26px; z-index: 5; }
-
-       .character {
-            width: 40px; height: 40px; background-color: #ef4444; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-size: 22px;
-            position: absolute; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: all 0.15s cubic-bezier(0.25, 1, 0.5, 1);
-            pointer-events: none;
-        }
-
-       .controls-dpad { display: flex; flex-direction: column; align-items: center; margin: 15px 0 5px 0; gap: 4px; }
-       .dpad-row { display: flex; gap: 4px; }
-       .btn-dpad {
-            width: 46px; height: 46px; background-color: var(--accent-color);
-            color: white; border: none; border-radius: 10px; font-size: 18px;
-            font-weight: bold; cursor: pointer; display: flex; align-items: center;
-            justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-            transition: transform 0.1s, background-color 0.2s;
-        }
-       .btn-dpad:active { transform: scale(0.92); filter: brightness(0.9); }
-       .dpad-spacer { width: 46px; height: 46px; }
-
-       .system-buttons { display: flex; gap: 10px; margin-top: 10px; }
-       .btn-sys { flex: 1; padding: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; background-color: #64748b; color: white; transition: all 0.2s; font-size: 13px; }
-       .btn-sys.primary { background-color: #10b981; }
-       .btn-sys:hover { opacity: 0.9; }
-
-       .tip { margin-top: 8px; font-size: 11px; opacity: 0.7; }
-
-       .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 100; }
-       .modal-content { background: var(--panel-bg); color: var(--text-color); padding: 25px; border-radius: 20px; text-align: center; max-width: 360px; width: 100%; border: 3px solid var(--border-color); }
-       .modal h2,.modal h3 { color: #10b981; margin-bottom: 8px; font-size: 20px; }
-       .modal p { margin-bottom: 15px; font-size: 14px; }
-       .modal button { padding: 10px 20px; background: var(--accent-color); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-
-       .lingo-box {
-            width: 42px; height: 42px; border: 2px solid var(--border-color);
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 18px; border-radius: 6px;
-            text-transform: uppercase; color: var(--text-color); background: transparent;
-            transition: all 0.2s ease;
-        }
-       .lingo-input-style {
-            width: 100%; padding: 12px; text-align: center; font-size: 20px;
-            text-transform: uppercase; letter-spacing: 6px; border: 2px solid var(--border-color);
-            border-radius: 10px; margin-bottom: 10px; background: rgba(0,0,0,0.04);
-            color: var(--text-color); outline: none; font-weight: bold;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Çatı Katı Kurtarma - 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&family=Outfit:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef2ff;--panel:#ffffffcc;--text:#0f172a;--border:#1e293b;--wall:#475569;--ladder:#a16207;--door:#facc15;--accent:#3b82f6;--roof:#bae6fd;--danger:#ef4444;--ok:#10b981}
+@media(prefers-color-scheme:dark){:root{--bg:#0b1220;--panel:#1e293bcc;--text:#f1f5f9;--border:#e2e8f0;--wall:#94a3b8;--ladder:#fbbf24;--roof:#1e3a8a}}
+.theme-night{--accent:#8b5cf6;--roof:#1e1b4b}
+.theme-cyber{--bg:#05010a;--panel:#140d26cc;--text:#7df9e5;--border:#ff2e93;--wall:#ff2e93;--ladder:#00ffd1;--accent:#d946ef;--roof:#0a0214}
+.theme-hot{--bg:#3c0a0a;--panel:#292524cc;--text:#fecaca;--border:#fb923c;--wall:#b45309;--ladder:#f59e0b;--accent:#ef4444;--roof:#fdba74}
+.theme-flood1,.theme-flood2,.theme-flood3,.theme-flood4,.theme-flood5{--accent:#0ea5e9}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,sans-serif;user-select:none}
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(1000px 600px at 10% 0%,var(--accent)18%,transparent 60%),radial-gradient(800px 500px at 90% 100%,#22d3ee22,transparent 60%),var(--bg);color:var(--text);transition:.3s}
+.game{background:var(--panel);backdrop-filter:blur(16px);border:4px solid var(--border);border-radius:24px;box-shadow:0 20px 50px #0003;padding:20px;width:100%;max-width:440px}
+h1{font-family:Outfit,sans-serif;font-size:20px;text-align:center;background:linear-gradient(90deg,var(--accent),#22d3ee);-webkit-background-clip:text;color:transparent}
+h2{font-size:12px;text-align:center;color:var(--danger);margin:2px 0 10px;font-weight:700}
+.status{display:flex;justify-content:space-between;background:#0001;padding:6px 12px;border-radius:10px;font-size:13px;font-weight:700;margin-bottom:12px;border:1px solid #0001}
+.wrap{position:relative}
+.roof{height:84px;background:linear-gradient(180deg,var(--roof),#0001);border:4px solid var(--border);border-bottom:0;border-radius:16px 16px 0 0;position:relative;overflow:hidden}
+.line{position:absolute;bottom:24px;left:10%;width:80%;height:2px;background:#475569}
+.cloth{position:absolute;bottom:6px;font-size:22px;animation:sway 3s ease-in-out infinite}
+.cloth:nth-child(3){left:20%}
+.cloth:nth-child(4){left:45%;animation-delay:-1s}
+.cloth:nth-child(5){left:70%;animation-delay:-2s}
+@keyframes sway{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+.target{position:absolute;bottom:10px;font-size:28px;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,86px);border:4px solid var(--border);background:#fff1;border-top:0}
+.base{height:76px;background:linear-gradient(#0284c7,#0369a1);border:4px solid var(--border);border-top:0;border-radius:0 0 16px 16px;display:none;position:relative;overflow:hidden}
+.wave{position:absolute;inset:0;background:linear-gradient(0deg,#0284c7 70%,#38bdf8);opacity:.85;animation:wave 3s linear infinite;width:200%}
+@keyframes wave{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.room{border:2px solid var(--wall);position:relative;display:flex;align-items:center;justify-content:center}
+.room.l{border-left:4px solid var(--border)}.room.r{border-right:4px solid var(--border)}.room.t{border-top:4px solid var(--border)}.room.b{border-bottom:4px solid var(--border)}
+.ladder{position:absolute;width:20px;height:100%;left:50%;transform:translateX(-50%);background:repeating-linear-gradient(var(--ladder) 0 5px,transparent 5px 12px);border-left:4px solid var(--ladder);border-right:4px solid var(--ladder)}
+.door{position:absolute;width:12px;height:46px;background:var(--door);bottom:0;border-radius:4px 4px 0 0;box-shadow:0 8px #facc1580}
+.door.l{left:-6px}.door.r{right:-6px}
+.trap{position:absolute;width:34px;height:8px;background:#0f172a;border:2px solid #e2e8f0;border-radius:4px;left:50%;transform:translateX(-50%)}
+.trap.t{top:-4px}.trap.b{bottom:-4px}
+.man{width:42px;height:42px;background:var(--danger);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;position:absolute;z-index:10;box-shadow:0 6px 14px #0004;transition:.18s cubic-bezier(.2,.8,.2,1);border:2px solid #fff5}
+.pad{display:flex;flex-direction:column;align-items:center;gap:6px;margin:16px 0 6px}
+.row{display:flex;gap:6px}
+.btn{width:50px;height:50px;background:var(--accent);color:#fff;border:0;border-radius:14px;font-size:20px;font-weight:800;box-shadow:0 6px 14px #0002;cursor:pointer;transition:.12s}
+.btn:active{transform:scale(.92)}
+.sp{width:50px;height:50px}
+.sys{display:flex;gap:10px;margin-top:10px}
+.sys button{flex:1;padding:11px;border:0;border-radius:10px;font-weight:700;color:#fff;background:#64748b;cursor:pointer}
+.sys button.ok{background:var(--ok)}
+.tip{font-size:11px;opacity:.7;text-align:center;margin-top:8px}
+.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;z-index:99}
+.box{background:var(--panel);backdrop-filter:blur(20px);color:var(--text);padding:26px;border-radius:20px;text-align:center;max-width:360px;width:92%;border:3px solid var(--border);box-shadow:0 20px 40px #0005}
+.box h3{color:var(--ok);margin-bottom:8px;font-family:Outfit,sans-serif;font-size:22px}
+.box p{margin-bottom:14px;opacity:.85}
+.box button{padding:10px 18px;background:var(--accent);color:#fff;border:0;border-radius:10px;font-weight:700;cursor:pointer}
+.lbox{width:44px;height:44px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;border-radius:8px;text-transform:uppercase;margin:2px;background:#0001}
+.lin{width:100%;padding:12px;text-align:center;font-size:20px;text-transform:uppercase;letter-spacing:6px;border:2px solid var(--border);border-radius:10px;margin:10px 0;background:#0001;color:var(--text);outline:0;font-weight:700}
+</style>
 </head>
 <body>
+<div class="game" id="gc" tabindex="0">
+<h1 id="ln">Yükleniyor...</h1>
+<h2 id="lt">Görev: Çatıya tırman!</h2>
+<div class="status"><span id="li">Seviye: 1</span><span id="mv">Hamle: 0</span></div>
+<div class="wrap" onclick="gc.focus()">
+<div class="roof" id="rf"><div class="line"></div><div class="cloth" style="left:20%">👕</div><div class="cloth" style="left:45%">👗</div><div class="cloth" style="left:70%">🎽</div><div class="target" id="gp" style="display:none;left:45%">👴🔥</div></div>
+<div class="grid" id="gd"></div>
+<div class="base" id="bs"><div class="wave"></div><div class="target" id="kt" style="left:50%">🐱</div></div>
+<div class="man" id="pl">🏃‍♀️</div>
+</div>
+<div class="pad">
+<div class="row"><button class="btn" onclick="mv(-1,0)">▲</button></div>
+<div class="row"><button class="btn" onclick="mv(0,-1)">◀</button><div class="sp"></div><button class="btn" onclick="mv(0,1)">▶</button></div>
+<div class="row"><button class="btn" onclick="mv(1,0)">▼</button></div>
+</div>
+<div class="sys"><button onclick="rs()">Sıfırla</button><button class="ok" onclick="sk()">Atla</button></div>
+<p class="tip">WASD / Ok tuşları</p>
+</div>
 
-    <div class="game-container" id="gameContainer" tabindex="0">
-        <header>
-            <h1 id="level-name">Yükleniyor...</h1>
-            <h2 id="level-task">Görev: Çatıya tırman!</h2>
-            <div class="game-status">
-                <span id="level-idx">Seviye: 1</span>
-                <span id="moves">Hamle: 0</span>
-            </div>
-        </header>
+<div class="modal" id="wm"><div class="box"><h3 id="mt">Harika!</h3><p id="md">Devam!</p><button onclick="nx()">Sonraki</button></div></div>
+<div class="modal" id="lm"><div class="box"><h3>🔐 Kilit</h3><p id="lh" style="color:var(--danger);font-weight:700;font-size:13px"></p><div id="lg" style="display:flex;flex-direction:column;gap:4px;align-items:center;margin:12px 0"></div><input id="lipt" class="lin" maxlength="5" onkeydown="if(event.key==='Enter')ck()"><button class="ok" style="width:100%;padding:12px;border:0;border-radius:10px;color:#fff;font-weight:700" onclick="ck()">Gönder</button><p id="le" style="color:var(--danger);font-size:12px;margin-top:6px;font-weight:700"></p></div></div>
 
-        <div class="building-wrapper" onclick="document.getElementById('gameContainer').focus()">
-            <div class="roof-section" id="roof">
-                <div class="clothesline" id="clothesline"></div>
-                <div class="clothing" style="left: 20%;">👕</div>
-                <div class="clothing" style="left: 45%;">👗</div>
-                <div class="clothing" style="left: 70%;">🎽</div>
-                <div class="roof-target" id="roof-grandpa" style="display:none; left: 45%;">👴🔥</div>
-            </div>
-
-            <div class="building-grid" id="grid"></div>
-
-            <div class="basement-section" id="basement">
-                <div class="water-wave"></div>
-                <div class="target-marker" id="kitten-target">🐱</div>
-            </div>
-
-            <div class="character" id="player">🏃‍♀️</div>
-        </div>
-
-        <div class="controls-dpad">
-            <div class="dpad-row">
-                <button class="btn-dpad" onclick="move(-1, 0)">▲</button>
-            </div>
-            <div class="dpad-row">
-                <button class="btn-dpad" onclick="move(0, -1)">◀</button>
-                <div class="dpad-spacer"></div>
-                <button class="btn-dpad" onclick="move(0, 1)">▶</button>
-            </div>
-            <div class="dpad-row">
-                <button class="btn-dpad" onclick="move(1, 0)">▼</button>
-            </div>
-        </div>
-
-        <div class="system-buttons">
-            <button class="btn-sys" onclick="resetLevel()">Sıfırla</button>
-            <button class="btn-sys primary" onclick="skipLevel()">Seviye Atla</button>
-        </div>
-        <p class="tip">Ekrandaki oklara basabilir veya klavyeden Yön Tuşları / WASD kullanabilirsiniz.</p>
-    </div>
-
-    <div class="modal" id="winModal">
-        <div class="modal-content">
-            <h2 id="modal-title">Harika İş! 🎉</h2>
-            <p id="modal-desc">Kıyafetleri ıslanmaktan kurtardın!</p>
-            <button id="next-btn" onclick="loadNextLevel()">Sonraki Seviye</button>
-        </div>
-    </div>
-
-    <div class="modal" id="lingoModal">
-        <div class="modal-content">
-            <h3>🔐 Şifreli Elektronik Kilit</h3>
-            <p id="lingo-hint" style="font-weight: 600; font-size:13px; color: #ef4444; margin-top:5px;"></p>
-
-            <div id="lingo-grid" style="display: flex; flex-direction: column; gap: 5px; align-items: center; margin: 15px 0;"></div>
-
-            <input type="text" id="lingo-input" class="lingo-input-style" autocomplete="off" onkeydown="if(event.key === 'Enter') checkLingoGuess()">
-            <button class="btn-sys primary" style="width:100%; padding: 12px;" onclick="checkLingoGuess()">Şifreyi Gönder</button>
-            <p id="lingo-error" style="color: #ef4444; font-size: 12px; margin-top: 8px; font-weight: bold;"></p>
-        </div>
-    </div>
-
-    <script>
-        const levels = [
-            {
-                name: "1. Kat: Yağmurlu Çatı Katı", task: "Görev: Yukarı tırman, kıyafetleri kurtar!", theme: "default", type: "roof",
-                start: { r: 3, c: 3 }, target: { r: -1, c: 0 },
-                grid: [
-                    [{ up: true, down: false, left: false, right: true }, { up: false, down: false, left: true, right: true }, { up: false, down: true, left: true, right: false }, { up: false, down: false, left: false, right: false }],
-                    [{ up: false, down: true, left: false, right: false }, { up: false, down: false, left: false, right: true }, { up: true, down: true, left: true, right: false }, { up: false, down: true, left: false, right: false }],
-                    [{ up: true, down: false, left: false, right: true }, { up: false, down: true, left: true, right: false }, { up: true, down: false, left: false, right: true }, { up: true, down: true, left: true, right: false }],
-                    [{ up: false, down: false, left: false, right: true }, { up: true, down: false, left: true, right: false }, { up: false, down: false, left: false, right: true }, { up: true, down: false, left: true, right: false }]
-                ]
-            },
-            {
-                name: "2. Kat: Gizemli Gece", task: "Görev: Yukarı tırman, kıyafetleri kurtar!", theme: "night", type: "roof",
-                start: { r: 3, c: 0 }, target: { r: -1, c: 2 },
-                grid: [
-                    [{ up: false, down: true, left: false, right: true }, { up: false, down: false, left: true, right: false }, { up: true, down: true, left: false, right: true }, { up: false, down: false, left: true, right: false }],
-                    [{ up: true, down: false, left: false, right: true }, { up: false, down: true, left: true, right: true }, { up: true, down: false, left: true, right: false }, { up: false, down: true, left: false, right: false }],
-                    [{ up: false, down: true, left: false, right: false }, { up: true, down: false, left: false, right: true }, { up: false, down: true, left: true, right: true }, { up: true, down: false, left: true, right: false }],
-                    [{ up: true, down: false, left: false, right: true }, { up: false, down: false, left: true, right: true }, { up: true, down: false, left: true, right: false }, { up: false, down: false, left: false, right: false }]
-                ]
-            },
-            {
-                name: "3. Kat: Siber Gelecek Kulesi", task: "Görev: Çatı kapısını hackle ve yukarı sız!", theme: "cyber", type: "roof",
-                start: { r: 3, c: 3 }, target: { r: -1, c: 3 },
-                grid: [
-                    [{ up: false, down: true, left: false, right: true }, { up: false, down: false, left: true, right: true }, { up: false, down: true, left: true, right: true }, { up: true, down: false, left: true, right: false }],
-                    [{ up: true, down: true, left: false, right: false }, { up: false, down: true, left: false, right: true }, { up: true, down: false, left: true, right: false }, { up: false, down: true, left: false, right: false }],
-                    [{ up: true, down: true, left: false, right: true }, { up: true, down: false, left: true, right: false }, { up: false, down: true, left: false, right: true }, { up: true, down: true, left: true, right: false }],
-                    [{ up: true, down: false, left: false, right: true }, { up: false, down: false, left: true, right: true }, { up: true, down: false, left: true, right: true }, { up: true, down: false, left: true, right: false }]
-                ]
-            },
-            {
-                name: "4. Kat: Su Baskını - Giriş", task: "⚠ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood1", type: "basement",
-                start: { r: -1, c: 0 }, target: { r: 4, c: 3 },
-                grid: [
-                    [{ up: true, down: true, left: false, right: true }, { up: false, down: true, left: true, right: false }, { up: false, down: true, left: false, right: true }, { up: false, down: false, left: true, right: false }],
-                    [{ up: true, down: true, left: false, right: false }, { up: true, down: false, left: false, right: true }, { up: true, down: true, left: true, right: false }, { up: false, down: true, left: false, right: false }],
-                    [{ up: true, down: false, left: false, right: true }, { up: false, down: true, left: true, right: false }, { up: true, down: true, left: false, right: true }, { up: true, down: true, left: true, right: false }],
-                    [{ up: false, down: false, left: false, right: true }, { up: true, down: false, left: true, right: true }, { up: true, down: false, left: true, right: false }, { up: true, down: true, left: false, right: false }]
-                ]
-            },
-            {
-                name: "5. Kat: Antik Su Sarnıcı", task: "⚠ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood2", type: "basement",
-                start: { r: -1, c: 2 }, target: { r: 4, c: 0 },
-                grid: [
-                    [{ up: false, down: true, left: false, right: true }, { up: false, down: true, left: true, right: true }, { up: true, down: true, left: true, right: false }, { up: false, down: false, left: false, right: false }],
-                    [{ up: true, down: true, left: false, right: false }, { up: true, down: false, left: false, right: true }, { up: true, down: true, left: true, right: false }, { up: false, down: true, left: false, right: false }],
-                    [{ up: true, down: false, left: false, right: true }, { up: false, down: true, left: true, right: true }, { up: true, down: false, left: true, right: false }, { up: true, down: true, left: false, right: false }],
-                    [{ up: false, down: true, left: false, right: true }, { up: true, down: false, left: true, right: true }, { up: false, down: false, left: true, right: true }, { up: true, down: false, left: true, right: false }]
-                ]
-            },
-            {
-                name: "6. Kat: Sualtı Laboratuvarı", task: "⚠ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood3", type: "basement",
-                start: { r: -1, c: 1 }, target: { r: 4, c: 2 },
-                grid: [
-                    [{ up: false, down: true, left: false, right: true }, { up: true, down: true, left: true, right: false }, { up: false, down: true, left: false, right: true }, { up: false, down: true, left: true, right: false }],
-                    [{ up: true, down: false, left: false, right: true }, { up: true, down: true, left: true, right: true }, { up: true, down: true, left: true, right: false }, { up: true, down: true, left: false, right: false }],
-                    [{ up: false, down: true, left: false, right: true }, { up: true, down: true, left: true, right: false }, { up: true, down: false, left: false, right: true }, { up: true, down: false, left: true, right: false }],
-                    [{ up: true, down: false, left: false, right: true }, { up: true, down: false, left: true, right: true }, { up: false, down: true, left: true, right: false }, { up: false, down: false, left: false, right: false }]
-                ]
-            },
-            {
-                name: "7. Kat: Batık Şehir Metrosu", task: "⚠ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood4", type: "basement",
-                start: { r: -1, c: 3 }, target: { r: 4, c: 1 },
-                grid: [
-                    [{ up: false, down: true, left: false, right: true }, { up: false, down: true, left: true, right: false }, { up: false, down: true, left: false, right: true }, { up: true, down: true, left: true, right: false }],
-                    [{ up: true, down: true, left: false, right: true }, { up: true, down: false, left: true, right: true }, { up: true, down: false, left: true, right: false }, { up: true, down: true, left: false, right: false }],
-                    [{ up: true, down: false, left: false, right: true }, { up: false, down: true, left: true, right: true }, { up: false, down: true, left: true, right: true }, { up: true, down: true, left: true, right: false }],
-                    [{ up: false, down: false, left: false, right: true }, { up: true, down: true, left: true, right: false }, { up: true, down: false, left: false, right: true }, { up: true, down: false, left: true, right: false }]
-                ]
-            },
-            {
-                name: "8. Kat: Büyük Okyanus Sığınağı", task: "⚠ Görev: Labirenti geç ve güvenli bölgeye sız!", theme: "flood5", type: "basement",
-                start: { r: -1, c: 0 }, target: { r: 4, c: 3 },
-                grid: [
-                    [{ up: true, down: true, left: false, right: true }, { up: false, down: false, left: true, right: true }, { up: false, down: true, left: true, right: false }, { up: false, down: true, left: false, right: false }],
-                    [{ up: true, down: false, left: false, right: false }, { up: false, down: true, left: false, right: true }, { up: true, down: false, left: true, right: true }, { up: true, down: true, left: true, right: false }],
-                    [{ up: false, down: true, left: false, right: true }, { up: true, down: true, left: true, right: false }, { up: false, down: true, left: false, right: false }, { up: true, down: false, left: false, right: false }],
-                    [{ up: true, down: false, left: false, right: true }, { up: true, down: false, left: true, right: true }, { up: true, down: false, left: true, right: false }, { up: false, down: true, left: false, right: false }]
-                ]
-            },
-            {
-                name: "9. Kat: Termometrenin Yükselişi", task: "🥵 GÖREV: Çatı katındaki dede sıcaktan bunaldı, yukarı tırman!", theme: "hot", type: "grandpa",
-                start: { r: 3, c: 0 }, target: { r: -1, c: 2 },
-                grid: [
-                    [{ up: false, down: true, left: false, right: true }, { up: false, down: false, left: true, right: true }, { up: true, down: true, left: true, right: false }, { up: false, down: false, left: false, right: false }],
-                    [{ up: true, down: false, left: false, right: true }, { up: false, down: true, left: true, right: false }, { up: true, down: false, left: false, right: true }, { up: false, down: true, left: true, right: false }],
-                    [{ up: false, down: true, left: false, right: false }, { up: true, down: true, left: false, right: true }, { up: false, down: true, left: true, right: true }, { up: true, down: false, left: true, right: false }],
-                    [{ up: true, down: false, left: false, right: true }, { up: true, down: false, left: true, right: false }, { up: true, down: false, left: false, right: true }, { up: false, down: false, left: true, right: false }]
-                ]
-            },
-            {
-                name: "10. Kat: Betonarme Çölü", task: "🥵 GÖREV: Klima bozuldu! Dedeye ulaşmak için engelleri aş!", theme: "hot", type: "grandpa",
-                start: { r: 3, c: 2 }, target: { r: -1, c: 1 },
-                grid: [
-                    [{ up: false, down: true, left: false, right: true }, { up: true, down: true, left: true, right: false }, { up: false, down: true, left: false, right: true }, { up: false, down: false, left: true, right: false }],
-                    [{ up: true, down: true, left: false, right: false }, { up: true, down: false, left: false, right: true }, { up: true, down: false, left: true, right: true }, { up: false, down: true, left: true, right: false }],
-                    [{ up: true, down: false, left: false, right: true }, { up: false, down: true, left: true, right: false }, { up: false, down: true, left: false, right: true }, { up: true, down: true, left: true, right: false }],
-                    [{ up: false, down: false, left: false, right: true }, { up: true, down: false, left: true, right: true }, { up: true, down: false, left: true, right: false }, { up: true, down: false, left: false, right: false }]
-                ]
-            },
-            {
-                name: "11. Kat: Kavurucu Sıcaklar (FİNAL)", task: "🔥 FİNAL GÖREVİ: Şifreyi kır, çatı kapısını aç ve dedeyi serinlet!", theme: "hot", type: "grandpa",
-                start: { r: 3, c: 3 }, target: { r: -1, c: 2 },
-                grid: [
-                    [{ up: false, down: true, left: false, right: true }, { up: false, down: true, left: true, right: false }, { up: true, down: true, left: false, right: true }, { up: false, down: false, left: true, right: false }],
-                    [{ up: true, down: false, left: false, right: false }, { up: true, down: true, left: false, right: true }, { up: true, down: false, left: true, right: false }, { up: false, down: true, left: false, right: false }],
-                    [{ up: false, down: true, left: false, right: true }, { up: true, down: false, left: true, right: false }, { up: false, down: true, left: false, right: true }, { up: true, down: true, left: true, right: false }],
-                    [{ up: true, down: false, left: false, right: true }, { up: false, down: false, left: true, right: true }, { up: true, down: false, left: true, right: true }, { up: true, down: false, left: true, right: false }]
-                ]
-            }
-        ];
-
-        let currentLevel = 0;
-        let moveCount = 0;
-        let pPos = { r: 0, c: 0 };
-
-        let lingoSecretWord = "";
-        let lingoAttempts = 0;
-        const maxLingoAttempts = 5;
-
-        const gridEl = document.getElementById('grid');
-        const playerEl = document.getElementById('player');
-        const roofEl = document.getElementById('roof');
-        const basementEl = document.getElementById('basement');
-        const kittenTargetEl = document.getElementById('kitten-target');
-        const clotheslineEl = document.getElementById('clothesline');
-        const grandpaEl = document.getElementById('roof-grandpa');
-
-        function initGame() {
-            gridEl.innerHTML = '';
-            const lvl = levels[currentLevel];
-            pPos = {...lvl.start };
-            moveCount = 0;
-
-            document.getElementById('level-name').innerText = lvl.name;
-            document.getElementById('level-task').innerText = lvl.task;
-            document.getElementById('level-idx').innerText = `Seviye: ${currentLevel + 1} / ${levels.length}`;
-            document.getElementById('moves').innerText = `Hamle: ${moveCount}`;
-
-            document.body.className = '';
-            if(lvl.theme!== 'default') document.body.classList.add('theme-' + lvl.theme);
-
-            if (lvl.type === "roof" || lvl.type === "grandpa") {
-                basementEl.style.display = 'none';
-                roofEl.style.borderBottomLeftRadius = '0';
-                roofEl.style.borderBottomRightRadius = '0';
-                gridEl.style.borderBottomLeftRadius = '16px';
-                gridEl.style.borderBottomRightRadius = '16px';
-
-                if (lvl.type === "grandpa") {
-                    clotheslineEl.style.display = 'none';
-                    document.querySelectorAll('.clothing').forEach(c => c.style.display = 'none');
-                    grandpaEl.style.display = 'block';
-                    grandpaEl.style.left = `calc(${12.5 + (lvl.target.c * 25)}% - 20px)`;
-                } else {
-                    clotheslineEl.style.display = 'block';
-                    document.querySelectorAll('.clothing').forEach(c => c.style.display = 'block');
-                    grandpaEl.style.display = 'none';
-                }
-            } else {
-                basementEl.style.display = 'block';
-                clotheslineEl.style.display = 'none';
-                grandpaEl.style.display = 'none';
-                document.querySelectorAll('.clothing').forEach(c => c.style.display = 'none');
-                gridEl.style.borderBottomLeftRadius = '0';
-                gridEl.style.borderBottomRightRadius = '0';
-                kittenTargetEl.style.left = `calc(${12.5 + (lvl.target.c * 25)}% - 13px)`;
-            }
-
-            for (let r = 0; r < 4; r++) {
-                for (let c = 0; c < 4; c++) {
-                    const cell = lvl.grid[r][c];
-                    const room = document.createElement('div');
-                    room.className = 'room';
-                    room.dataset.row = r;
-                    room.dataset.col = c;
-
-                    if (c === 0) room.classList.add('left-edge');
-                    if (c === 3) room.classList.add('right-edge');
-                    if (r === 0) room.classList.add('top-edge');
-                    if (r === 3) room.classList.add('bottom-edge');
-
-                    if (cell.up) {
-                        const ladder = document.createElement('div');
-                        ladder.className = 'ladder';
-                        room.appendChild(ladder);
-
-                        const trap = document.createElement('div');
-                        trap.className = 'trapdoor top';
-                        room.appendChild(trap);
-                    }
-                    if (cell.down) {
-                        const trap = document.createElement('div');
-                        trap.className = 'trapdoor bottom';
-                        room.appendChild(trap);
-                    }
-                    if (cell.right && c < 3) {
-                        const door = document.createElement('div');
-                        door.className = 'door right';
-                        room.appendChild(door);
-                    }
-                    if (cell.left && c > 0) {
-                        const door = document.createElement('div');
-                        door.className = 'door left';
-                        room.appendChild(door);
-                    }
-
-                    if(r === 0 && cell.up) {
-                        const roofLadder = document.createElement('div');
-                        roofLadder.className = 'ladder';
-                        roofLadder.style.bottom = '0';
-                        room.appendChild(roofLadder);
-                    }
-
-                    gridEl.appendChild(room);
-                }
-            }
-
-            updatePlayerPosition();
-            document.getElementById('gameContainer').focus();
-        }
-
-        function updatePlayerPosition() {
-            const lvl = levels[currentLevel];
-
-            if (pPos.r === lvl.target.r && pPos.c === lvl.target.c) {
-                renderPlayerAtFinal(lvl.target.r, lvl.target.c);
-                setTimeout(() => {
-                    if (currentLevel === 2 || currentLevel === 7 || currentLevel === 10) {
-                        startLingoGame();
-                    } else {
-                        showWinModal(lvl);
-                    }
-                }, 180);
-                return;
-            }
-
-            if (pPos.r === -1) {
-                roofEl.appendChild(playerEl);
-                playerEl.style.top = '32px';
-                playerEl.style.left = `calc(${12.5 + (pPos.c * 25)}% - 20px)`;
-            }
-            else if (pPos.r === 4) {
-                basementEl.appendChild(playerEl);
-                playerEl.style.top = '15px';
-                playerEl.style.left = `calc(${12.5 + (pPos.c * 25)}% - 20px)`;
-            }
-            else {
-                const activeRoom = document.querySelector(`[data-row="${pPos.r}"][data-col="${pPos.c}"]`);
-                if (activeRoom) {
-                    activeRoom.appendChild(playerEl);
-                    playerEl.style.top = '22px';
-                    playerEl.style.left = 'calc(50% - 20px)';
-                }
-            }
-        }
-
-        function renderPlayerAtFinal(tr, tc) {
-            if (tr === -1) {
-                roofEl.appendChild(playerEl);
-                playerEl.style.top = '32px';
-                playerEl.style.left = `calc(${12.5 + (tc * 25)}% - 20px)`;
-            } else if (tr === 4) {
-                basementEl.appendChild(playerEl);
-                playerEl.style.top = '15px';
-                playerEl.style.left = `calc(${12.5 + (tc * 25)}% - 20px)`;
-            }
-        }
-
-        function startLingoGame() {
-            let word = "";
-            let hint = "";
-
-            if (currentLevel === 2) {
-                word = "ÇATI";
-                hint = "Çatı katı kapısı kilitlendi! Açmak için 4 harfli şifreyi bulun.";
-            } else if (currentLevel === 7) {
-                word = "MİYAV";
-                hint = "Kafes Şifrelenmiş! Kediyi kurtarmak için 5 harfli şifreyi çözün.";
-            } else if (currentLevel === 10) {
-                word = "SICAK";
-                hint = "Güneş Paneli Kilidi! Dedeyi sıcaktan kurtarmak için 5 harfli şifreyi bulun.";
-            }
-
-            lingoSecretWord = word;
-            lingoAttempts = 0;
-
-            document.getElementById('lingo-hint').innerText = hint;
-            document.getElementById('lingo-error').innerText = "";
-
-            const inputEl = document.getElementById('lingo-input');
-            inputEl.value = "";
-            inputEl.maxLength = word.length;
-
-            const gridEl = document.getElementById('lingo-grid');
-            gridEl.innerHTML = "";
-            for (let i = 0; i < maxLingoAttempts; i++) {
-                const row = document.createElement('div');
-                row.style.display = 'flex';
-                row.style.gap = '5px';
-                for (let j = 0; j < word.length; j++) {
-                    const box = document.createElement('div');
-                    box.className = 'lingo-box';
-                    box.id = `l-box-${i}-${j}`;
-                    row.appendChild(box);
-                }
-                gridEl.appendChild(row);
-            }
-
-            document.getElementById('lingoModal').style.display = 'flex';
-            setTimeout(() => inputEl.focus(), 50);
-        }
-
-        function checkLingoGuess() {
-            const inputEl = document.getElementById('lingo-input');
-            const errorEl = document.getElementById('lingo-error');
-            let guess = inputEl.value.toLocaleUpperCase('tr-TR').trim();
-
-            if (guess.length!== lingoSecretWord.length) {
-                errorEl.innerText = `Hata: Şifre tam olarak ${lingoSecretWord.length} harfli olmalı!`;
-                return;
-            }
-            errorEl.innerText = "";
-
-            let secretArr = lingoSecretWord.split('');
-            let guessArr = guess.split('');
-            let rowIdx = lingoAttempts;
-            let statuses = Array(lingoSecretWord.length).fill('gray');
-
-            for (let i = 0; i < lingoSecretWord.length; i++) {
-                if (guessArr[i] === secretArr[i]) {
-                    statuses[i] = 'green';
-                    secretArr[i] = null;
-                    guessArr[i] = null;
-                }
-            }
-
-            for (let i = 0; i < lingoSecretWord.length; i++) {
-                if (guessArr[i]!== null) {
-                    let sIdx = secretArr.indexOf(guessArr[i]);
-                    if (sIdx!== -1) {
-                        statuses[i] = 'yellow';
-                        secretArr[sIdx] = null;
-                    }
-                }
-            }
-
-            for (let i = 0; i < lingoSecretWord.length; i++) {
-                const box = document.getElementById(`l-box-${rowIdx}-${i}`);
-                box.innerText = guess[i];
-                box.style.color = '#ffffff';
-                if (statuses[i] === 'green') {
-                    box.style.backgroundColor = '#10b981';
-                    box.style.borderColor = '#10b981';
-                } else if (statuses[i] === 'yellow') {
-                    box.style.backgroundColor = '#eab308';
-                    box.style.borderColor = '#eab308';
-                } else {
-                    box.style.backgroundColor = '#64748b';
-                    box.style.borderColor = '#64748b';
-                }
-            }
-
-            lingoAttempts++;
-            inputEl.value = "";
-            inputEl.focus();
-
-            if (guess === lingoSecretWord) {
-                setTimeout(() => {
-                    document.getElementById('lingoModal').style.display = 'none';
-                    showWinModal(levels[currentLevel]);
-                }, 600);
-                return;
-            }
-
-            if (lingoAttempts >= maxLingoAttempts) {
-                errorEl.innerText = "Sistem Bloke Oldu! Şifre Modülü Yeniden Başlatılıyor...";
-                setTimeout(() => {
-                    startLingoGame();
-                }, 2000);
-            }
-        }
-
-        function showWinModal(lvl) {
-            const modalTitle = document.getElementById('modal-title');
-            const modalDesc = document.getElementById('modal-desc');
-            const nextBtn = document.getElementById('next-btn');
-
-            if (currentLevel === levels.length - 1) {
-                modalTitle.innerText = "🏆 MUHTEŞEM ZAFER! 🏆";
-                modalDesc.innerText = "Tüm şifreleri kırdın, labirentleri aştın ve yaşlı dedeyi klimanın serinliğine ulaştırarak büyük kahraman oldun!";
-                nextBtn.innerText = "Baştan Başla";
-            } else {
-                modalTitle.innerText = "Kilit Açıldı! 🎉";
-                if(lvl.type === "grandpa") {
-                    modalDesc.innerText = "Harika! Yaşlı dedeyi kurtarma yolunda bir kat daha yaklaştın.";
-                } else {
-                    modalDesc.innerText = lvl.target.r === -1? "Harika! Yukarı çatı katına geçiş sağlandı!" : "Miyav! Başarıyla alt kata geçiş sağlandı.";
-                }
-                nextBtn.innerText = "Sonraki Seviye";
-            }
-            document.getElementById('winModal').style.display = 'flex';
-        }
-
-        function move(dr, dc) {
-            if(document.getElementById('lingoModal').style.display === 'flex' || document.getElementById('winModal').style.display === 'flex') return;
-
-            const lvl = levels[currentLevel];
-            const tR = pPos.r + dr;
-            const tC = pPos.c + dc;
-
-            if (tC < 0 || tC > 3 || tR < -1 || tR > 4) return;
-
-            const currentCell = (pPos.r >= 0 && pPos.r <= 3)? lvl.grid[pPos.r][pPos.c] : null;
-            const targetCell = (tR >= 0 && tR <= 3)? lvl.grid[tR][tC] : null;
-            let canPass = false;
-
-            if (dr === 0) {
-                if (pPos.r === -1 || pPos.r === 4) {
-                    canPass = true;
-                } else if (currentCell && targetCell) {
-                    if (dc === 1 && currentCell.right && targetCell.left) canPass = true;
-                    if (dc === -1 && currentCell.left && targetCell.right) canPass = true;
-                }
-            }
-            else if (dc === 0) {
-                if (pPos.r === -1 && tR === 0) {
-                    if (targetCell && targetCell.up) canPass = true;
-                }
-                else if (pPos.r === 0 && tR === -1) {
-                    if (currentCell && currentCell.up) canPass = true;
-                }
-                else if (pPos.r >= 0 && pPos.r <= 3 && tR >= 0 && tR <= 3) {
-                    if (dr === 1 && currentCell && currentCell.down && targetCell.up) canPass = true;
-                    if (dr === -1 && currentCell && currentCell.up && targetCell.down) canPass = true;
-                }
-                else if (pPos.r === 3 && tR === 4) {
-                    if (currentCell && currentCell.down) canPass = true;
-                }
-                else if (pPos.r === 4 && tR === 3) {
-                    if (targetCell && targetCell.down) canPass = true;
-                }
-            }
-
-            if (canPass) {
-                pPos.r = tR;
-                pPos.c = tC;
-                moveCount++;
-                document.getElementById('moves').innerText = `Hamle: ${moveCount}`;
-                updatePlayerPosition();
-            }
-        }
-
-        window.addEventListener('keydown', (e) => {
-            if(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'w', 's', 'a', 'd', 'W', 'S', 'A', 'D'].includes(e.key)) {
-                if(document.activeElement.id!== 'lingo-input') {
-                    e.preventDefault();
-                }
-            }
-
-            if(document.getElementById('lingoModal').style.display === 'flex' || document.getElementById('winModal').style.display === 'flex') return;
-
-            switch(e.key) {
-                case 'ArrowUp': case 'w': case 'W': move(-1, 0); break;
-                case 'ArrowDown': case 's': case 'S': move(1, 0); break;
-                case 'ArrowLeft': case 'a': case 'A': move(0, -1); break;
-                case 'ArrowRight': case 'd': case 'D': move(0, 1); break;
-            }
-        });
-
-        function loadNextLevel() {
-            document.getElementById('winModal').style.display = 'none';
-            currentLevel = (currentLevel + 1) % levels.length;
-            initGame();
-        }
-
-        function resetLevel() { initGame(); }
-        function skipLevel() {
-            document.getElementById('winModal').style.display = 'none';
-            document.getElementById('lingoModal').style.display = 'none';
-            currentLevel = (currentLevel + 1) % levels.length;
-            initGame();
-        }
-
-        document.addEventListener("DOMContentLoaded", initGame);
-    </script>
+<script>
+const LV=[
+{name:"1. Kat: Yağmurlu Çatı",task:"Görev: Yukarı tırman!",theme:"",type:"roof",s:{r:3,c:3},t:{r:-1,c:0},g:[
+[{u:1,d:0,l:0,r:1},{u:0,d:0,l:1,r:1},{u:0,d:1,l:1,r:0},{u:0,d:0,l:0,r:0}],
+[{u:0,d:1,l:0,r:0},{u:0,d:0,l:0,r:1},{u:1,d:1,l:1,r:0},{u:0,d:1,l:0,r:0}],
+[{u:1,d:0,l:0,r:1},{u:0,d:1,l:1,r:0},{u:1,d:0,l:0,r:1},{u:1,d:1,l:1,r:0}],
+[{u:0,d:0,l:0,r:1},{u:1,d:0,l:1,r:0},{u:0,d:0,l:0,r:1},{u:1,d:0,l:1,r:0}]]},
+{name:"2. Kat: Gizemli Gece",task:"Görev: Yukarı!",theme:"night",type:"roof",s:{r:3,c:0},t:{r:-1,c:2},g:[
+[{u:0,d:1,l:0,r:1},{u:0,d:0,l:1,r:0},{u:1,d:1,l:0,r:1},{u:0,d:0,l:1,r:0}],
+[{u:1,d:0,l:0,r:1},{u:0,d:1,l:1,r:1},{u:1,d:0,l:1,r:0},{u:0,d:1,l:0,r:0}],
+[{u:0,d:1,l:0,r:0},{u:1,d:0,l:0,r:1},{u:0,d:1,l:1,r:1},{u:1,d:0,l:1,r:0}],
+[{u:1,d:0,l:0,r:1},{u:0,d:0,l:1,r:1},{u:1,d:0,l:1,r:0},{u:0,d:0,l:0,r:0}]]},
+{name:"3. Kat: Siber Kule",task:"Görev: Hackle!",theme:"cyber",type:"roof",s:{r:3,c:3},t:{r:-1,c:3},g:[
+[{u:0,d:1,l:0,r:1},{u:0,d:0,l:1,r:1},{u:0,d:1,l:1,r:1},{u:1,d:0,l:1,r:0}],
+[{u:1,d:1,l:0,r:0},{u:0,d:1,l:0,r:1},{u:1,d:0,l:1,r:0},{u:0,d:1,l:0,r:0}],
+[{u:1,d:1,l:0,r:1},{u:1,d:0,l:1,r:0},{u:0,d:1,l:0,r:1},{u:1,d:1,l:1,r:0}],
+[{u:1,d:0,l:0,r:1},{u:0,d:0,l:1,r:1},{u:1,d:0,l:1,r:1},{u:1,d:0,l:1,r:0}]]},
+{name:"4. Kat: Su Baskını",task:"⚠ Aşağı in, kediyi kurtar!",theme:"flood1",type:"base",s:{r:-1,c:0},t:{r:4,c:3},g:[
+[{u:1,d:1,l:0,r:1},{u:0,d:1,l:1,r:0},{u:0,d:1,l:0,r:1},{u:0,d:0,l:1,r:0}],
+[{u:1,d:1,l:0,r:0},{u:1,d:0,l:0,r:1},{u:1,d:1,l:1,r:0},{u:0,d:1,l:0,r:0}],
+[{u:1,d:0,l:0,r:1},{u:0,d:1,l:1,r:0},{u:1,d:1,l:0,r:1},{u:1,d:1,l:1,r:0}],
+[{u:0,d:0,l:0,r:1},{u:1,d:0,l:1,r:1},{u:1,d:0,l:1,r:0},{u:1,d:1,l:0,r:0}]]},
+{name:"5. Kat: Sarnıç",task:"⚠ Aşağı!",theme:"flood2",type:"base",s:{r:-1,c:2},t:{r:4,c:0},g:[
+[{u:0,d:1,l:0,r:1},{u:0,d:1,l:1,r:1},{u:1,d:1,l:1,r:0},{u:0,d:0,l:0,r:0}],
+[{u:1,d:1,l:0,r:0},{u:1,d:0,l:0,r:1},{u:1,d:1,l:1,r:0},{u:0,d:1,l:0,r:0}],
+[{u:1,d:0,l:0,r:1},{u:0,d:1,l:1,r:1},{u:1,d:0,l:1,r:0},{u:1,d:1,l:0,r:0}],
+[{u:0,d:1,l:0,r:1},{u:1,d:0,l:1,r:1},{u:0,d:0,l:1,r:1},{u:1,d:0,l:1,r:0}]]},
+{name:"6. Kat: Lab",task:"⚠ Aşağı!",theme:"flood3",type:"base",s:{r:-1,c:1},t:{r:4,c:2},g:[
+[{u:0,d:1,l:0,r:1},{u:1,d:1,l:1,r:0},{u:0,d:1,l:0,r:1},{u:0,d:1,l:1,r:0}],
+[{u:1,d:0,l:0,r:1},{u:1,d:1,l:1,r:1},{u:1,d:1,l:1,r:0},{u:1,d:1,l:0,r:0}],
+[{u:0,d:1,l:0,r:1},{u:1,d:1,l:1,r:0},{u:1,d:0,l:0,r:1},{u:1,d:0,l:1,r:0}],
+[{u:1,d:0,l:0,r:1},{u:1,d:0,l:1,r:1},{u:0,d:1,l:1,r:0},{u:0,d:0,l:0,r:0}]]},
+{name:"7. Kat: Metro",task:"⚠ Aşağı!",theme:"flood4",type:"base",s:{r:-1,c:3},t:{r:4,c:1},g:[
+[{u:0,d:1,l:0,r:1},{u:0,d:1,l:1,r:0},{u:0,d:1,l:0,r:1},{u:1,d:1,l:1,r:0}],
+[{u:1,d:1,l:0,r:1},{u:1,d:0,l:1,r:1},{u:1,d:0,l:1,r:0},{u:1,d:1,l:0,r:0}],
+[{u:1,d:0,l:0,r:1},{u:0,d:1,l:1,r:1},{u:0,d:1,l:1,r:1},{u:1,d:1,l:1,r:0}],
+[{u:0,d:0,l:0,r:1},{u:1,d:1,l:1,r:0},{u:1,d:0,l:0,r:1},{u:1,d:0,l:1,r:0}]]},
+{name:"8. Kat: Sığınak",task:"⚠ Güvenli bölge!",theme:"flood5",type:"base",s:{r:-1,c:0},t:{r:4,c:3},g:[
+[{u:1,d:1,l:0,r:1},{u:0,d:0,l:1,r:1},{u:0,d:1,l:1,r:0},{u:0,d:1,l:0,r:0}],
+[{u:1,d:0,l:0,r:0},{u:0,d:1,l:0,r:1},{u:1,d:0,l:1,r:1},{u:1,d:1,l:1,r:0}],
+[{u:0,d:1,l:0,r:1},{u:1,d:1,l:1,r:0},{u:0,d:1,l:0,r:0},{u:1,d:0,l:0,r:0}],
+[{u:1,d:0,l:0,r:1},{u:1,d:0,l:1,r:1},{u:1,d:0,l:1,r:0},{u:0,d:1,l:0,r:0}]]},
+{name:"9. Kat: Sıcak",task:"🥵 Dede yukarıda!",theme:"hot",type:"grandpa",s:{r:3,c:0},t:{r:-1,c:2},g:[
+[{u:0,d:1,l:0,r:1},{u:0,d:0,l:1,r:1},{u:1,d:1,l:1,r:0},{u:0,d:0,l:0,r:0}],
+[{u:1,d:0,l:0,r:1},{u:0,d:1,l:1,r:0},{u:1,d:0,l:0,r:1},{u:0,d:1,l:1,r:0}],
+[{u:0,d:1,l:0,r:0},{u:1,d:1,l:0,r:1},{u:0,d:1,l:1,r:1},{u:1,d:0,l:1,r:0}],
+[{u:1,d:0,l:0,r:1},{u:1,d:0,l:1,r:0},{u:1,d:0,l:0,r:1},{u:0,d:0,l:1,r:0}]]},
+{name:"10. Kat: Çöl",task:"🥵 Klima bozuk!",theme:"hot",type:"grandpa",s:{r:3,c:2},t:{r:-1,c:1},g:[
+[{u:0,d:1,l:0,r:1},{u:1,d:1,l:1,r:0},{u:0,d:1,l:0,r:1},{u:0,d:0,l:1,r:0}],
+[{u:1,d:1,l:0,r:0},{u:1,d:0,l:0,r:1},{u:1,d:0,l:1,r:1},{u:0,d:1,l:1,r:0}],
+[{u:1,d:0,l:0,r:1},{u:0,d:1,l:1,r:0},{u:0,d:1,l:0,r:1},{u:1,d:1,l:1,r:0}],
+[{u:0,d:0,l:0,r:1},{u:1,d:0,l:1,r:1},{u:1,d:0,l:1,r:0},{u:1,d:0,l:0,r:0}]]},
+{name:"11. Kat: FİNAL",task:"🔥 Şifreyi kır!",theme:"hot",type:"grandpa",s:{r:3,c:3},t:{r:-1,c:2},g:[
+[{u:0,d:1,l:0,r:1},{u:0,d:1,l:1,r:0},{u:1,d:1,l:0,r:1},{u:0,d:0,l:1,r:0}],
+[{u:1,d:0,l:0,r:0},{u:1,d:1,l:0,r:1},{u:1,d:0,l:1,r:0},{u:0,d:1,l:0,r:0}],
+[{u:0,d:1,l:0,r:1},{u:1,d:0,l:1,r:0},{u:0,d:1,l:0,r:1},{u:1,d:1,l:1,r:0}],
+[{u:1,d:0,l:0,r:1},{u:0,d:0,l:1,r:1},{u:1,d:0,l:1,r:1},{u:1,d:0,l:1,r:0}]]}
+];
+let cl=0,mc=0,pp={r:0,c:0},sw="",at=0; const gd=document.getElementById('gd'),pl=document.getElementById('pl'),rf=document.getElementById('rf'),bs=document.getElementById('bs'),kt=document.getElementById('kt'),gp=document.getElementById('gp');
+function ig(){gd.innerHTML='';const L=LV[cl];pp={...L.s};mc=0;ln.textContent=L.name;lt.textContent=L.task;li.textContent=`Seviye: ${cl+1}/${LV.length}`;mv.textContent=`Hamle: 0`;document.body.className='';if(L.theme)document.body.classList.add('theme-'+L.theme);bs.style.display=L.type==='base'?'block':'none';rf.style.borderRadius=L.type==='base'?'16px 16px 0 0':'16px 16px 0 0';gd.style.borderRadius=L.type==='base'?'0':'0 0 16px 16px';document.querySelectorAll('.cloth').forEach(e=>e.style.display=L.type==='roof'?'block':'none');document.querySelector('.line').style.display=L.type==='roof'?'block':'none';gp.style.display=L.type==='grandpa'?'block':'none';if(L.type==='grandpa')gp.style.left=`calc(${12.5+L.t.c*25}% - 14px)`;if(L.type==='base')kt.style.left=`calc(${12.5+L.t.c*25}% - 13px)`;for(let r=0;r<4;r++)for(let c=0;c<4;c++){const ce=L.g[r][c],d=document.createElement('div');d.className='room'+(c===0?' l':'')+(c===3?' r':'')+(r===0?' t':'')+(r===3?' b':'');d.dataset.r=r;d.dataset.c=c;if(ce.u){const l=document.createElement('div');l.className='ladder';d.appendChild(l);const t=document.createElement('div');t.className='trap t';d.appendChild(t)}if(ce.d){const t=document.createElement('div');t.className='trap b';d.appendChild(t)}if(ce.r&&c<3){const dr=document.createElement('div');dr.className='door r';d.appendChild(dr)}if(ce.l&&c>0){const dl=document.createElement('div');dl.className='door l';d.appendChild(dl)}gd.appendChild(d)}up();gc.focus()}
+function up(){const L=LV[cl];if(pp.r===L.t.r&&pp.c===L.t.c){rp(L.t.r,L.t.c);setTimeout(()=>{[2,7,10].includes(cl)?st():sm(L)},180);return}const p=pp.r===-1?rf:pp.r===4?bs:document.querySelector(`[data-r="${pp.r}"][data-c="${pp.c}"]`);p.appendChild(pl);pl.style.top=pp.r===-1?'30px':pp.r===4?'14px':'22px';pl.style.left=`calc(${pp.r<0||pp.r>3?12.5+pp.c*25:50}% - 21px)`}
+function rp(r,c){const p=r===-1?rf:bs;p.appendChild(pl);pl.style.top=r===-1?'30px':'14px';pl.style.left=`calc(${12.5+c*25}% - 21px)`}
+function mv(dr,dc){if(lm.style.display==='flex'||wm.style.display==='flex')return;const L=LV[cl],tr=pp.r+dr,tc=pp.c+dc;if(tc<0||tc>3||tr<-1||tr>4)return;const cc=pp.r>=0&&pp.r<4?L.g[pp.r][pp.c]:null,tc2=tr>=0&&tr<4?L.g[tr][tc]:null;let ok=0;if(dr===0){ok=pp.r===-1||pp.r===4||(cc&&tc2&&((dc===1&&cc.r&&tc2.l)||(dc===-1&&cc.l&&tc2.r)))}else{if(pp.r===-1&&tr===0)ok=tc2&&tc2.u;else if(pp.r===0&&tr===-1)ok=cc&&cc.u;else if(pp.r>=0&&pp.r<4&&tr>=0&&tr<4)ok=dr===1?cc&&cc.d&&tc2.u:cc&&cc.u&&tc2.d;else if(pp.r===3&&tr===4)ok=cc&&cc.d;else if(pp.r===4&&tr===3)ok=tc2&&tc2.d}if(ok){pp.r=tr;pp.c=tc;mv.textContent=`Hamle: ${++mc}`;up()}}
+function st(){const w=cl===2?"ÇATI":cl===7?"MİYAV":"SICAK",h=cl===2?"4 harfli çatı şifresi":cl===7?"5 harfli kedi şifresi":"5 harfli sıcak şifresi";sw=w;at=0;lh.textContent=h;le.textContent='';lipt.value='';lipt.maxLength=w.length;lg.innerHTML='';for(let i=0;i<5;i++){const r=document.createElement('div');r.style.display='flex';r.style.gap='4px';for(let j=0;j<w.length;j++){const b=document.createElement('div');b.className='lbox';b.id=`b${i}${j}`;r.appendChild(b)}lg.appendChild(r)}lm.style.display='flex';lipt.focus()}
+function ck(){const g=lipt.value.toLocaleUpperCase('tr-TR').trim();if(g.length!==sw.length){le.textContent=`${sw.length} harf!`;return}le.textContent='';const s=[...sw],a=[...g],st=Array(sw.length).fill(0);for(let i=0;i<sw.length;i++)if(a[i]===s[i]){st[i]=2;s[i]=a[i]=null}for(let i=0;i<sw.length;i++)if(a[i]&&s.includes(a[i])){st[i]=1;s[s.indexOf(a[i])]=null}for(let i=0;i<sw.length;i++){const b=document.getElementById(`b${at}${i}`);b.textContent=g[i];b.style.background=st[i]===2?'#10b981':st[i]===1?'#eab308':'#64748b';b.style.color='#fff';b.style.borderColor='transparent'}at++;lipt.value='';if(g===sw){setTimeout(()=>{lm.style.display='none';sm(LV[cl])},500)}else if(at>=5){le.textContent='Tekrar dene...';setTimeout(st,1500)}}
+function sm(L){mt.textContent=cl===LV.length-1?'🏆 ZAFER!':'Kilit Açıldı!';md.textContent=cl===LV.length-1?'Tüm seviyeler bitti!':L.type==='grandpa'?'Dedeye yaklaştın!':L.t.r===-1?'Çatıya çıktın!':'Aşağı indin!';wm.style.display='flex'}
+function nx(){wm.style.display='none';cl=(cl+1)%LV.length;ig()}
+function rs(){ig()}function sk(){wm.style.display='none';lm.style.display='none';cl=(cl+1)%LV.length;ig()}
+window.addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'].includes(e.key)&&document.activeElement!==lipt)e.preventDefault();if(lm.style.display==='flex'||wm.style.display==='flex')return;const k=e.key;if(k==='ArrowUp'||k==='w'||k==='W')mv(-1,0);if(k==='ArrowDown'||k==='s'||k==='S')mv(1,0);if(k==='ArrowLeft'||k==='a'||k==='A')mv(0,-1);if(k==='ArrowRight'||k==='d'||k==='D')mv(0,1)});
+document.addEventListener('DOMContentLoaded',ig);
+</script>
 </body>
 </html>
