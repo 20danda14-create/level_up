@@ -9,7 +9,8 @@
             --bg-color: #f4f7f6;
             --panel-bg: #ffffff;
             --text-color: #2c3e50;
-            --border-color: #cbd5e1;
+            --border-color: #1e293b; /* Duvarlar için daha keskin, koyu renk */
+            --inner-wall: #475569;   /* Odalar arası kalın belirgin duvar rengi */
             --ladder-color: #8a7355;
             --door-color: #ffff00;
             --accent-color: #3b82f6;
@@ -20,7 +21,8 @@
             --bg-color: #0f172a;
             --panel-bg: #1e293b;
             --text-color: #f8fafc;
-            --border-color: #475569;
+            --border-color: #f8fafc;
+            --inner-wall: #94a3b8;
             --ladder-color: #fbbf24;
             --door-color: #ffff00;
             --accent-color: #8b5cf6;
@@ -32,6 +34,7 @@
             --panel-bg: #130924;
             --text-color: #00ffcc;
             --border-color: #ff007f;
+            --inner-wall: #ff007f;
             --ladder-color: #00ffcc;
             --door-color: #ffff00;
             --accent-color: #e0aaff;
@@ -42,7 +45,8 @@
             --bg-color: #0c4a6e;
             --panel-bg: #0f172a;
             --text-color: #38bdf8;
-            --border-color: #0284c7;
+            --border-color: #38bdf8;
+            --inner-wall: #0284c7;
             --ladder-color: #bae6fd;
             --door-color: #ffff00;
             --accent-color: #0284c7;
@@ -52,7 +56,8 @@
             --bg-color: #064e3b;
             --panel-bg: #022c22;
             --text-color: #34d399;
-            --border-color: #059669;
+            --border-color: #34d399;
+            --inner-wall: #059669;
             --ladder-color: #a7f3d0;
             --door-color: #ffff00;
             --accent-color: #059669;
@@ -62,7 +67,8 @@
             --bg-color: #1e1b4b;
             --panel-bg: #0f0e17;
             --text-color: #818cf8;
-            --border-color: #4f46e5;
+            --border-color: #818cf8;
+            --inner-wall: #4f46e5;
             --ladder-color: #c7d2fe;
             --door-color: #ffff00;
             --accent-color: #4f46e5;
@@ -72,7 +78,8 @@
             --bg-color: #451a03;
             --panel-bg: #1c1917;
             --text-color: #fb923c;
-            --border-color: #ea580c;
+            --border-color: #fb923c;
+            --inner-wall: #ea580c;
             --ladder-color: #ffedd5;
             --door-color: #ffff00;
             --accent-color: #ea580c;
@@ -82,7 +89,8 @@
             --bg-color: #4c0519;
             --panel-bg: #1c050e;
             --text-color: #f43f5e;
-            --border-color: #e11d48;
+            --border-color: #f43f5e;
+            --inner-wall: #e11d48;
             --ladder-color: #ffe4e6;
             --door-color: #ffff00;
             --accent-color: #e11d48;
@@ -117,7 +125,7 @@
             max-width: 440px;
             width: 100%;
             text-align: center;
-            border: 3px solid var(--border-color);
+            border: 4px solid var(--border-color);
             outline: none;
         }
 
@@ -191,11 +199,18 @@
             100% { transform: translateX(-50%) translateY(0); }
         }
 
-        .room { border: 1px dashed rgba(255, 255, 255, 0.05); position: relative; display: flex; align-items: center; justify-content: center; }
-        .room.left-edge { border-left: 3px solid var(--border-color); }
-        .room.right-edge { border-right: 3px solid var(--border-color); }
-        .room.top-edge { border-top: 3px solid var(--border-color); }
-        .room.bottom-edge { border-bottom: 3px solid var(--border-color); }
+        /* İç oda sınırlarını belirgin ve kalın duvar haline getirdik */
+        .room { 
+            border: 2px solid var(--inner-wall); 
+            position: relative; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        .room.left-edge { border-left: 4px solid var(--border-color); }
+        .room.right-edge { border-right: 4px solid var(--border-color); }
+        .room.top-edge { border-top: 4px solid var(--border-color); }
+        .room.bottom-edge { border-bottom: 4px solid var(--border-color); }
 
         .ladder {
             position: absolute; width: 20px; height: 100%; left: 50%; transform: translateX(-50%);
@@ -207,9 +222,9 @@
         .door.left { left: -6px; }
         .door.right { right: -6px; }
 
-        .trapdoor { position: absolute; width: 34px; height: 6px; background: #1e293b; border-radius: 50%; left: 50%; transform: translateX(-50%); z-index: 4; }
-        .trapdoor.top { top: -3px; }
-        .trapdoor.bottom { bottom: -3px; }
+        .trapdoor { position: absolute; width: 34px; height: 8px; background: #0f172a; border: 2px solid #e2e8f0; border-radius: 4px; left: 50%; transform: translateX(-50%); z-index: 4; }
+        .trapdoor.top { top: -4px; }
+        .trapdoor.bottom { bottom: -4px; }
 
         .target-marker { position: absolute; font-size: 26px; z-index: 5; }
 
@@ -252,7 +267,6 @@
         .modal p { margin-bottom: 15px; font-size: 14px; }
         .modal button { padding: 10px 20px; background: var(--accent-color); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        /* Lingo Grid Tasarımı */
         .lingo-box {
             width: 42px; height: 42px; border: 2px solid var(--border-color);
             display: flex; align-items: center; justify-content: center;
@@ -319,7 +333,6 @@
         <p class="tip">Ekrandaki oklara basabilir veya klavyeden Yön Tuşları / WASD kullanabilirsiniz.</p>
     </div>
 
-    <!-- Standart Kazanma Modalı -->
     <div class="modal" id="winModal">
         <div class="modal-content">
             <h2 id="modal-title">Harika İş! 🎉</h2>
@@ -328,7 +341,6 @@
         </div>
     </div>
 
-    <!-- Şifreli Lingo Kelime Bulma Modalı -->
     <div class="modal" id="lingoModal">
         <div class="modal-content">
             <h3>🔐 Şifreli Elektronik Kilit</h3>
@@ -368,61 +380,60 @@
                 name: "3. Kat: Siber Gelecek Kulesi", task: "Görev: Çatı kapısını hackle ve yukarı sız!", theme: "cyber",
                 start: { r: 3, c: 3 }, target: { r: -1, c: 3 },
                 grid: [
-                    [{ up: false, down: false, left: false, right: false }, { up: false, down: false, left: false, right: false }, { up: false, down: true, left: false, right: true },  { up: true, down: false, left: true, right: false }],
-                    [{ up: false, down: true, left: false, right: true },   { up: false, down: false, left: true, right: true },   { up: true, down: false, left: true, right: false },  { up: false, down: false, left: false, right: false }],
-                    [{ up: true, down: true, left: false, right: false },   { up: false, down: false, left: false, right: false }, { up: false, down: false, left: false, right: false }, { up: false, down: false, left: false, right: false }],
-                    [{ up: true, down: false, left: false, right: true },   { up: false, down: false, left: true, right: true },   { up: false, down: false, left: true, right: true },  { up: false, down: false, left: true, right: false }]
+                    [{ up: false, down: true, left: false, right: true },   { up: false, down: false, left: true, right: true },   { up: false, down: true, left: true, right: true },   { up: true, down: false, left: true, right: false }],
+                    [{ up: true, down: true, left: false, right: false },   { up: false, down: true, left: false, right: true },   { up: true, down: false, left: true, right: false },  { up: false, down: true, left: false, right: false }],
+                    [{ up: true, down: true, left: false, right: true },    { up: true, down: false, left: true, right: false },   { up: false, down: true, left: false, right: true },  { up: true, down: true, left: true, right: false }],
+                    [{ up: true, down: false, left: false, right: true },   { map: false, down: false, left: true, right: true },  { up: true, down: false, left: true, right: true },   { up: true, down: false, left: true, right: false }]
                 ]
             },
             {
                 name: "4. Kat: Su Baskını - Giriş", task: "⚠️ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood1",
                 start: { r: -1, c: 0 }, target: { r: 4, c: 3 },
                 grid: [
-                    [{ up: true, down: false, left: false, right: true },  { up: false, down: true, left: true, right: false },   { up: false, down: false, left: false, right: false }, { up: false, down: false, left: false, right: false }],
-                    [{ up: false, down: false, left: false, right: false }, { up: true, down: false, left: false, right: true },   { up: false, down: true, left: true, right: false },  { up: false, down: false, left: false, right: false }],
-                    [{ up: false, down: false, left: false, right: false }, { up: false, down: false, left: false, right: false }, { up: true, down: false, left: false, right: true },  { up: false, down: true, left: true, right: false }],
-                    [{ up: false, down: false, left: false, right: false }, { up: false, down: false, left: false, right: false }, { up: false, down: false, left: false, right: false }, { up: true, down: true, left: false, right: false }]
+                    [{ up: true, down: true, left: false, right: true },   { up: false, down: true, left: true, right: false },   { up: false, down: true, left: false, right: true },   { up: false, down: false, left: true, right: false }],
+                    [{ up: true, down: true, left: false, right: false },  { up: true, down: false, left: false, right: true },   { up: true, down: true, left: true, right: false },    { up: false, down: true, left: false, right: false }],
+                    [{ up: true, down: false, left: false, right: true },  { up: false, down: true, left: true, right: false },   { up: true, down: true, left: false, right: true },    { up: true, down: true, left: true, right: false }],
+                    [{ up: false, down: false, left: false, right: true }, { up: true, down: false, left: true, right: true },    { up: true, down: false, left: true, right: false },   { up: true, down: true, left: false, right: false }]
                 ]
             },
             {
                 name: "5. Kat: Antik Su Sarnıcı", task: "⚠️ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood2",
                 start: { r: -1, c: 2 }, target: { r: 4, c: 0 },
                 grid: [
-                    [{ up: false, down: true, left: false, right: true },  { up: false, down: false, left: true, right: true },   { up: true, down: false, left: true, right: false },  { up: false, down: false, left: false, right: false }],
-                    [{ up: true, down: true, left: false, right: false },  { up: false, down: false, left: false, right: false }, { up: false, down: false, left: false, right: false }, { up: false, down: false, left: false, right: false }],
-                    [{ up: true, down: false, left: false, right: true },  { up: false, down: false, left: true, right: true },   { up: false, down: true, left: true, right: false },  { up: false, down: false, left: false, right: false }],
-                    [{ up: false, down: true, left: false, right: true },  { up: false, down: false, left: true, right: true },   { up: true, down: false, left: true, right: false },  { up: false, down: false, left: false, right: false }]
+                    [{ up: false, down: true, left: false, right: true },  { up: false, down: true, left: true, right: true },    { up: true, down: true, left: true, right: false },   { up: false, down: false, left: false, right: false }],
+                    [{ up: true, down: true, left: false, right: false },  { up: true, down: false, left: false, right: true },   { up: true, down: true, left: true, right: false },    { up: false, down: true, left: false, right: false }],
+                    [{ up: true, down: false, left: false, right: true },  { up: false, down: true, left: true, right: true },    { up: true, down: false, left: true, right: false },   { up: true, down: true, left: false, right: false }],
+                    [{ up: false, down: true, left: false, right: true },  { up: true, down: false, left: true, right: true },    { up: false, down: false, left: true, right: true },   { up: true, down: false, left: true, right: false }]
                 ]
             },
             {
                 name: "6. Kat: Sualtı Laboratuvarı", task: "⚠️ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood3",
                 start: { r: -1, c: 1 }, target: { r: 4, c: 2 },
                 grid: [
-                    [{ up: false, down: false, left: false, right: false }, { up: true, down: false, left: false, right: true },  { up: false, down: false, left: true, right: true },  { up: false, down: true, left: true, right: false }],
-                    [{ up: false, down: false, left: false, right: false }, { up: false, down: false, left: false, right: false }, { up: false, down: false, left: false, right: false }, { up: true, down: true, left: false, right: false }],
-                    [{ up: false, down: false, left: false, right: false }, { up: false, down: true, left: false, right: true },   { up: false, down: false, left: true, right: true },  { up: true, down: false, left: true, right: false }],
-                    [{ up: false, down: false, left: false, right: false }, { up: true, down: false, left: false, right: true },   { up: false, down: true, left: true, right: false },  { up: false, down: false, left: false, right: false }]
+                    [{ up: false, down: true, left: false, right: true },  { up: true, down: true, left: true, right: false },    { up: false, down: true, left: false, right: true },   { up: false, down: true, left: true, right: false }],
+                    [{ up: true, down: false, left: false, right: true },  { up: true, down: false, left: true, right: true },    { up: true, down: true, left: true, right: false },    { up: true, down: true, left: false, right: false }],
+                    [{ up: false, down: true, left: false, right: true },  { up: false, down: true, left: true, right: false },   { up: true, down: false, left: false, right: true },   { up: true, down: false, left: true, right: false }],
+                    [{ up: true, down: false, left: false, right: true },  { up: true, down: false, left: true, right: true },    { up: false, down: true, left: true, right: false },   { up: false, down: false, left: false, right: false }]
                 ]
             },
             {
                 name: "7. Kat: Batık Şehir Metrosu", task: "⚠️ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood4",
                 start: { r: -1, c: 3 }, target: { r: 4, c: 1 },
                 grid: [
-                    [{ up: false, down: false, left: false, right: false }, { up: false, down: false, left: false, right: false }, { up: false, down: true, left: false, right: true },  { up: true, down: false, left: true, right: false }],
-                    [{ up: false, down: true, left: false, right: true },   { up: false, down: false, left: true, right: true },   { up: true, down: false, left: true, right: false },  { up: false, down: false, left: false, right: false }],
-                    [{ up: true, down: false, left: false, right: true },   { up: false, down: false, left: true, right: true },   { up: false, down: false, left: true, right: true },  { up: false, down: true, left: true, right: false }],
-                    [{ up: false, down: false, left: false, right: false }, { up: false, down: true, left: false, right: true },   { up: false, down: false, left: true, right: true },  { up: true, down: false, left: true, right: false }]
+                    [{ up: false, down: true, left: false, right: true },  { up: false, down: true, left: true, right: false },   { up: false, down: true, left: false, right: true },   { up: true, down: true, left: true, right: false }],
+                    [{ up: true, down: true, left: false, right: true },   { up: true, down: false, left: true, right: true },    { up: true, down: false, left: true, right: false },   { up: true, down: true, left: false, right: false }],
+                    [{ up: true, down: false, left: false, right: true },  { up: false, down: true, left: true, right: true },    { up: false, down: true, left: true, right: true },    { up: true, down: true, left: true, right: false }],
+                    [{ up: false, down: false, left: false, right: true }, { up: true, down: true, left: true, right: false },    { up: true, down: false, left: false, right: true },   { up: true, down: false, left: true, right: false }]
                 ]
             },
             {
-                // SEVİYE 8: ÇÖZÜLEBİLİR YENİ MATRİS
                 name: "8. Kat: Büyük Okyanus Sığınağı (FİNAL)", task: "⚠️ FİNAL: Kilitli kapıyı kır ve yavru kediyi kurtar!", theme: "flood5",
                 start: { r: -1, c: 0 }, target: { r: 4, c: 3 },
                 grid: [
-                    [{ up: true, down: false, left: false, right: true },  { up: false, down: false, left: true, right: true },   { up: false, down: false, left: true, right: true },  { up: false, down: true, left: true, right: false }],
-                    [{ up: false, down: true, left: false, right: true },   { up: false, down: false, left: true, right: true },   { up: false, down: false, left: true, right: true },  { up: true, down: false, left: true, right: false }],
-                    [{ up: true, down: false, left: false, right: true },   { up: false, down: false, left: true, right: true },   { up: false, down: false, left: true, right: true },  { up: false, down: true, left: true, right: false }],
-                    [{ up: false, down: false, left: false, right: false }, { up: false, down: false, left: false, right: false }, { up: false, down: false, left: false, right: false }, { up: true, down: true, left: false, right: false }]
+                    [{ up: true, down: true, left: false, right: true },   { up: false, down: true, left: true, right: true },    { up: false, down: true, left: true, right: true },    { up: false, down: true, left: true, right: false }],
+                    [{ up: true, down: true, left: false, right: true },   { up: true, down: true, left: true, right: true },     { up: true, down: true, left: true, right: true },     { up: true, down: false, left: true, right: false }],
+                    [{ up: true, down: true, left: false, right: true },   { up: true, down: true, left: true, right: true },     { up: true, down: true, left: true, right: true },     { up: false, down: true, left: true, right: false }],
+                    [{ up: true, down: false, left: false, right: true },  { up: true, down: false, left: true, right: true },    { up: true, down: false, left: true, right: true },    { up: true, down: true, left: true, right: false }]
                 ]
             }
         ];
@@ -431,7 +442,6 @@
         let moveCount = 0;
         let pPos = { r: 0, c: 0 };
 
-        // Lingo Ayarları
         let lingoSecretWord = "";
         let lingoAttempts = 0;
         const maxLingoAttempts = 5;
@@ -530,11 +540,9 @@
         function updatePlayerPosition() {
             const lvl = levels[currentLevel];
 
-            // BÖLÜM BİTİRME TETİKLEYİCİSİ
             if (pPos.r === lvl.target.r && pPos.c === lvl.target.c) {
                 renderPlayerAtFinal(lvl.target.r, lvl.target.c);
                 setTimeout(() => {
-                    // Seviye 3 (index 2) veya Seviye 8 (index 7) ise Lingo şifresini başlat
                     if (currentLevel === 2 || currentLevel === 7) {
                         startLingoGame();
                     } else {
@@ -576,7 +584,6 @@
             }
         }
 
-        // LINGO SİSTEMİ FONKSİYONLARI
         function startLingoGame() {
             let word = "";
             let hint = "";
