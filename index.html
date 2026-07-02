@@ -218,10 +218,9 @@
             display: flex; align-items: center; justify-content: center; font-size: 22px;
             position: absolute; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             transition: all 0.15s cubic-bezier(0.25, 1, 0.5, 1);
-            pointer-events: none; /* Tıklamayı engellemez, buton odaklı kalır */
+            pointer-events: none;
         }
 
-        /* Yeni Ekran Kontrol Paneli (D-Pad) Stilleri */
         .controls-dpad {
             display: flex;
             flex-direction: column;
@@ -386,13 +385,14 @@
                 ]
             },
             {
-                name: "8. Kat: Büyük Okyanus Sığınağı", task: "⚠️ FİNAL: En dipten yavru kediyi hemen çıkart!", theme: "flood5",
+                // SEVİYE 8 TAMAMEN YENİLENDİ VE ÇÖZÜLEBİLİR HALE GETİRİLDİ
+                name: "8. Kat: Büyük Okyanus Sığınağı (FİNAL)", task: "⚠️ FİNAL: En dipten yavru kediyi hemen çıkart!", theme: "flood5",
                 start: { r: -1, c: 0 }, target: { r: 4, c: 3 },
                 grid: [
-                    [{ up: true, down: false, left: false, right: true },  { up: false, down: true, left: true, right: false },   { up: false, down: false, left: false, right: false }, { up: false, down: false, left: false, right: false }],
-                    [{ up: false, down: false, left: false, right: false }, { up: true, down: false, left: false, right: true },   { up: false, down: true, left: true, right: false },  { up: false, down: false, left: false, right: false }],
-                    [{ up: false, down: true, left: false, right: true },   { up: false, down: false, left: true, right: false },  { up: true, down: false, left: false, right: false }, { up: false, down: false, left: false, right: false }],
-                    [{ up: true, down: false, left: false, right: true },   { up: false, down: false, left: true, right: true },   { up: false, down: false, left: true, right: true },  { up: false, down: true, left: true, right: false }]
+                    [{ up: true, down: false, left: false, right: true },  { up: false, down: false, left: true, right: true },   { up: false, down: false, left: true, right: true },  { up: false, down: true, left: true, right: false }],
+                    [{ up: false, down: true, left: false, right: true },   { up: false, down: false, left: true, right: true },   { up: false, down: false, left: true, right: true },  { up: true, down: false, left: true, right: false }],
+                    [{ up: true, down: false, left: false, right: true },   { up: false, down: false, left: true, right: true },   { up: false, down: false, left: true, right: true },  { up: false, down: true, left: true, right: false }],
+                    [{ up: false, down: false, left: false, right: false }, { up: false, down: false, left: false, right: false }, { up: false, down: false, left: false, right: false }, { up: true, down: true, left: false, right: false }]
                 ]
             }
         ];
@@ -489,7 +489,6 @@
             }
 
             updatePlayerPosition();
-            // Otomatik odaklanmayı tetikle
             document.getElementById('gameContainer').focus();
         }
 
@@ -600,9 +599,7 @@
             }
         }
 
-        // KLAVYE KONTROLLERİ + TARAYICI SAYFA KAYDIRMA ENGELİ
         window.addEventListener('keydown', (e) => {
-            // Oyun tuşlarına basıldığında sayfanın aşağı/yukarı kaymasını engelle
             if(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'w', 's', 'a', 'd', 'W', 'S', 'A', 'D'].includes(e.key)) {
                 e.preventDefault();
             }
