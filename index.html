@@ -96,7 +96,6 @@
             --accent-color: #e11d48;
             --roof-bg: #4c0519;
         }
-        /* Yeni Sıcak Teması */
         .theme-hot {
             --bg-color: #7c2d12;
             --panel-bg: #292524;
@@ -443,10 +442,10 @@
                 name: "8. Kat: Büyük Okyanus Sığınağı", task: "⚠️ Görev: Labirenti geç ve güvenli bölgeye sız!", theme: "flood5", type: "basement",
                 start: { r: -1, c: 0 }, target: { r: 4, c: 3 },
                 grid: [
-                    [{ up: true, down: true, left: true, right: true },   { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true }],
-                    [{ up: true, down: true, left: true, right: true },   { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true }],
-                    [{ up: true, down: true, left: true, right: true },   { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true }],
-                    [{ up: true, down: true, left: true, right: true },   { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true }]
+                    [{ up: true, down: true, left: false, right: true },   { up: false, down: false, left: true, right: true },  { up: false, down: true, left: true, right: false },  { up: false, down: true, left: false, right: false }],
+                    [{ up: true, down: false, left: false, right: false }, { up: false, down: true, left: false, right: true },  { up: true, down: false, left: true, right: true },   { up: true, down: true, left: true, right: false }],
+                    [{ up: false, down: true, left: false, right: true },  { up: true, down: true, left: true, right: false },   { up: false, down: true, left: false, right: false }, { up: true, down: false, left: false, right: false }],
+                    [{ up: true, down: false, left: false, right: true },  { up: true, down: false, left: true, right: true },   { up: true, down: false, left: true, right: false },  { up: false, down: true, left: false, right: false }]
                 ]
             },
             {
@@ -460,12 +459,12 @@
                 ]
             },
             {
-                name: "10. Kat: Betonerme Çölü", task: "🥵 GÖREV: Klima bozuldu! Dedeye ulaşmak için engelleri aş!", theme: "hot", type: "grandpa",
+                name: "10. Kat: Betonarme Çölü", task: "🥵 GÖREV: Klima bozuldu! Dedeye ulaşmak için engelleri aş!", theme: "hot", type: "grandpa",
                 start: { r: 3, c: 2 }, target: { r: -1, c: 1 },
                 grid: [
                     [{ up: false, down: true, left: false, right: true },  { up: true, down: true, left: true, right: false },   { up: false, down: true, left: false, right: true },  { up: false, down: false, left: true, right: false }],
                     [{ up: true, down: true, left: false, right: false },  { up: true, down: false, left: false, right: true },  { up: true, down: false, left: true, right: true },   { up: false, down: true, left: true, right: false }],
-                    [{ up: true, down: false, left: false, right: true },  { false: false, down: true, left: true, right: false }, { up: false, down: true, left: false, right: true },  { up: true, down: true, left: true, right: false }],
+                    [{ up: true, down: false, left: false, right: true },  { up: false, down: true, left: true, right: false },  { up: false, down: true, left: false, right: true },  { up: true, down: true, left: true, right: false }],
                     [{ up: false, down: false, left: false, right: true }, { up: true, down: false, left: true, right: true },   { up: true, down: false, left: true, right: false },  { up: true, down: false, left: false, right: false }]
                 ]
             },
@@ -473,10 +472,10 @@
                 name: "11. Kat: Kavurucu Sıcaklar (FİNAL)", task: "🔥 FİNAL GÖREVİ: Şifreyi kır, çatı kapısını aç ve dedeyi serinlet!", theme: "hot", type: "grandpa",
                 start: { r: 3, c: 3 }, target: { r: -1, c: 2 },
                 grid: [
-                    [{ up: true, down: true, left: true, right: true },   { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true }],
-                    [{ up: true, down: true, left: true, right: true },   { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true }],
-                    [{ up: true, down: true, left: true, right: true },   { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true }],
-                    [{ up: true, down: true, left: true, right: true },   { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true }]
+                    [{ up: false, down: true, left: false, right: true },  { up: false, down: true, left: true, right: false },  { up: true, down: true, left: false, right: true },   { up: false, down: false, left: true, right: false }],
+                    [{ up: true, down: false, left: false, right: false }, { up: true, down: true, left: false, right: true },   { up: true, down: false, left: true, right: false },  { up: false, down: true, left: false, right: false }],
+                    [{ up: false, down: true, left: false, right: true },  { up: true, down: false, left: true, right: false },  { up: false, down: true, left: false, right: true },  { up: true, down: true, left: true, right: false }],
+                    [{ up: true, down: false, left: false, right: true },  { up: false, down: false, left: true, right: true },  { up: true, down: false, left: true, right: true },   { up: true, down: false, left: true, right: false }]
                 ]
             }
         ];
@@ -511,7 +510,6 @@
             document.body.className = '';
             if(lvl.theme !== 'default') document.body.classList.add('theme-' + lvl.theme);
 
-            // Çatı / Bodrum Ayarları ve Görsel Yönetim
             if (lvl.type === "roof" || lvl.type === "grandpa") {
                 basementEl.style.display = 'none';
                 roofEl.style.borderBottomLeftRadius = '0';
