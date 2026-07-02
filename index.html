@@ -77,7 +77,7 @@
 
         body {
             background: radial-gradient(120% 120% at 0% 0%, var(--bg-2), transparent 50%),
-                        radial-gradient(120% 120% at 100% 100%, var(--accent-2) / 0.2, transparent 50%),
+                        radial-gradient(120% 120% at 100% 100%, oklch(from var(--accent-2) l c h / 0.2), transparent 50%),
                         var(--bg-1);
             color: var(--text);
             display: flex;
@@ -593,51 +593,3 @@
     </div>
 
     <script>
-        lucide.createIcons();
-        
-        const levels = [
-            {
-                name: "1. Kat: Yağmurlu Çatı Katı", task: "Görev: Yukarı tırman, kıyafetleri kurtar!", theme: "default", type: "roof",
-                start: { r: 3, c: 3 }, target: { r: -1, c: 0 },
-                grid: [
-                    [{ up: true, down: false, left: false, right: true },  { up: false, down: false, left: true, right: true },   { up: false, down: true, left: true, right: false },   { up: false, down: false, left: false, right: false }],
-                    [{ up: false, down: true, left: false, right: false }, { up: false, down: false, left: false, right: true },   { up: true, down: true, left: true, right: false },    { up: false, down: true, left: false, right: false }],
-                    [{ up: true, down: false, left: false, right: true },  { up: false, down: true, left: true, right: false },    { up: true, down: false, left: false, right: true },   { up: true, down: true, left: true, right: false }],
-                    [{ up: false, down: false, left: false, right: true }, { up: true, down: false, left: true, right: false },    { up: false, down: false, left: false, right: true },  { up: true, down: false, left: true, right: false }]
-                ]
-            },
-            {
-                name: "2. Kat: Gizemli Gece", task: "Görev: Yukarı tırman, kıyafetleri kurtar!", theme: "night", type: "roof",
-                start: { r: 3, c: 0 }, target: { r: -1, c: 2 },
-                grid: [
-                    [{ up: false, down: true, left: false, right: true },  { up: false, down: false, left: true, right: false },   { up: true, down: true, left: false, right: true },   { up: false, down: false, left: true, right: false }],
-                    [{ up: true, down: false, left: false, right: true },  { up: false, down: true, left: true, right: true },     { up: true, down: false, left: true, right: false },  { up: false, down: true, left: false, right: false }],
-                    [{ up: false, down: true, left: false, right: false }, { up: true, down: false, left: false, right: true },    { up: false, down: true, left: true, right: true },   { up: true, down: false, left: true, right: false }],
-                    [{ up: true, down: false, left: false, right: true },  { up: false, down: false, left: true, right: true },    { up: true, down: false, left: true, right: false },  { up: false, down: false, left: false, right: false }]
-                ]
-            },
-            {
-                name: "3. Kat: Siber Gelecek Kulesi", task: "Görev: Çatı kapısını hackle ve yukarı sız!", theme: "cyber", type: "roof",
-                start: { r: 3, c: 3 }, target: { r: -1, c: 3 },
-                grid: [
-                    [{ up: false, down: true, left: false, right: true },   { up: false, down: false, left: true, right: true },   { up: false, down: true, left: true, right: true },   { up: true, down: false, left: true, right: false }],
-                    [{ up: true, down: true, left: false, right: false },   { up: false, down: true, left: false, right: true },   { up: true, down: false, left: true, right: false },  { up: false, down: true, left: false, right: false }],
-                    [{ up: true, down: true, left: false, right: true },    { up: true, down: false, left: true, right: false },   { up: false, down: true, left: false, right: true },  { up: true, down: true, left: true, right: false }],
-                    [{ up: true, down: false, left: false, right: true },   { up: false, down: false, left: true, right: true },   { up: true, down: false, left: true, right: true },   { up: true, down: false, left: true, right: false }]
-                ]
-            },
-            {
-                name: "4. Kat: Su Baskını - Giriş", task: "⚠ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood1", type: "basement",
-                start: { r: -1, c: 0 }, target: { r: 4, c: 3 },
-                grid: [
-                    [{ up: true, down: true, left: false, right: true },   { up: false, down: true, left: true, right: false },   { up: false, down: true, left: false, right: true },   { up: false, down: false, left: true, right: false }],
-                    [{ up: true, down: true, left: false, right: false },  { up: true, down: false, left: false, right: true },   { up: true, down: true, left: true, right: false },    { up: false, down: true, left: false, right: false }],
-                    [{ up: true, down: false, left: false, right: true },  { up: false, down: true, left: true, right: false },   { up: true, down: true, left: false, right: true },    { up: true, down: true, left: true, right: false }],
-                    [{ up: false, down: false, left: false, right: true }, { up: true, down: false, left: true, right: true },    { up: true, down: false, left: true, right: false },   { up: true, down: true, left: false, right: false }]
-                ]
-            },
-            {
-                name: "5. Kat: Antik Su Sarnıcı", task: "⚠ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood2", type: "basement",
-                start: { r: -1, c: 2 }, target: { r: 4, c: 0 },
-                grid: [
-                    [{ up: false, down: true, left: false,
