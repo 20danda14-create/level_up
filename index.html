@@ -3,505 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Çatı Katı Kurtarma Bulmacası | 2026 Edition</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <title>Çatı Katı Kurtarma Bulmacası</title>
     <style>
         :root {
-            --bg-1: oklch(96% 0.02 250);
-            --bg-2: oklch(92% 0.03 200);
-            --panel-bg: oklch(100% 0 0 / 0.6);
-            --panel-border: oklch(80% 0.02 250 / 0.4);
-            --text: oklch(25% 0.02 250);
-            --text-muted: oklch(45% 0.02 250);
-            --accent: oklch(65% 0.25 260);
-            --accent-2: oklch(70% 0.25 190);
-            --danger: oklch(65% 0.25 25);
-            --success: oklch(70% 0.2 150);
-            --ladder: oklch(60% 0.1 80);
-            --door: oklch(90% 0.2 95);
-            --roof: oklch(85% 0.1 230);
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --radius-sm: 10px;
-            --shadow: 0 10px 30px oklch(0% 0 0 / 0.12);
-            --ease: cubic-bezier(.2,.8,.2,1);
+            --bg-color: #f4f7f6;
+            --panel-bg: #ffffff;
+            --text-color: #2c3e50;
+            --border-color: #1e293b;
+            --inner-wall: #475569;
+            --ladder-color: #8a7355;
+            --door-color: #facc15;
+            --accent-color: #3b82f6;
+            --roof-bg: #bae6fd;
         }
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-1: oklch(20% 0.03 250);
-                --bg-2: oklch(15% 0.03 200);
-                --panel-bg: oklch(25% 0.02 250 / 0.5);
-                --panel-border: oklch(40% 0.02 250 / 0.4);
-                --text: oklch(96% 0.01 250);
-                --text-muted: oklch(75% 0.01 250);
-                --accent: oklch(70% 0.25 260);
-                --accent-2: oklch(75% 0.25 190);
-                --ladder: oklch(80% 0.15 85);
-                --roof: oklch(25% 0.05 250);
-            }
+       .theme-night {
+            --bg-color: #0f172a;
+            --panel-bg: #1e293b;
+            --text-color: #f8fafc;
+            --border-color: #f8fafc;
+            --inner-wall: #94a3b8;
+            --ladder-color: #fbbf24;
+            --door-color: #facc15;
+            --accent-color: #8b5cf6;
+            --roof-bg: #1e1b4b;
         }
 
-        .theme-night {
-            --accent: oklch(70% 0.25 300);
-            --roof: oklch(20% 0.05 270);
-        }
-        .theme-cyber {
-            --accent: oklch(75% 0.3 320);
-            --accent-2: oklch(80% 0.3 180);
-            --roof: oklch(10% 0.1 300);
-            --ladder: oklch(80% 0.3 180);
-        }
-        .theme-hot {
-            --accent: oklch(70% 0.25 30);
-            --accent-2: oklch(75% 0.25 60);
-            --roof: oklch(80% 0.15 50);
-        }
-        .theme-flood1, .theme-flood2, .theme-flood3, .theme-flood4, .theme-flood5 {
-            --accent: oklch(70% 0.2 220);
-            --accent-2: oklch(75% 0.2 200);
+       .theme-cyber {
+            --bg-color: #090514;
+            --panel-bg: #130924;
+            --text-color: #00ffcc;
+            --border-color: #ff007f;
+            --inner-wall: #ff007f;
+            --ladder-color: #00ffcc;
+            --door-color: #facc15;
+            --accent-color: #e0aaff;
+            --roof-bg: #030008;
         }
 
-        * {
-            box-sizing: border-box;
-            font-family: 'Inter', system-ui, sans-serif;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+       .theme-flood1 { --bg-color: #0c4a6e; --panel-bg: #0f172a; --text-color: #38bdf8; --border-color: #38bdf8; --inner-wall: #0284c7; --ladder-color: #bae6fd; --door-color: #facc15; --accent-color: #0284c7; --roof-bg: #0f172a; }
+       .theme-flood2 { --bg-color: #064e3b; --panel-bg: #022c22; --text-color: #34d399; --border-color: #34d399; --inner-wall: #059669; --ladder-color: #a7f3d0; --door-color: #facc15; --accent-color: #059669; --roof-bg: #064e3b; }
+       .theme-flood3 { --bg-color: #1e1b4b; --panel-bg: #0f0e17; --text-color: #818cf8; --border-color: #818cf8; --inner-wall: #4f46e5; --ladder-color: #c7d2fe; --door-color: #facc15; --accent-color: #4f46e5; --roof-bg: #1e1b4b; }
+       .theme-flood4 { --bg-color: #451a03; --panel-bg: #1c1917; --text-color: #fb923c; --border-color: #fb923c; --inner-wall: #ea580c; --ladder-color: #ffedd5; --door-color: #facc15; --accent-color: #ea580c; --roof-bg: #451a03; }
+       .theme-flood5 { --bg-color: #4c0519; --panel-bg: #1c050e; --text-color: #f43f5e; --border-color: #f43f5e; --inner-wall: #e11d48; --ladder-color: #ffe4e6; --door-color: #facc15; --accent-color: #e11d48; --roof-bg: #4c0519; }
+       .theme-hot { --bg-color: #7c2d12; --panel-bg: #292524; --text-color: #fca5a5; --border-color: #f97316; --inner-wall: #b45309; --ladder-color: #f59e0b; --door-color: #facc15; --accent-color: #ef4444; --roof-bg: #fdba74; }
+
+        * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; padding: 0; user-select: none; }
 
         body {
-            background: radial-gradient(120% 120% at 0% 0%, var(--bg-2), transparent 50%),
-                        radial-gradient(120% 120% at 100% 100%, oklch(from var(--accent-2) l c h / 0.2), transparent 50%),
-                        var(--bg-1);
-            color: var(--text);
+            background: linear-gradient(135deg, var(--bg-color), #dbeafe);
+            color: var(--text-color);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
+            padding: 15px;
+            transition: all 0.4s ease;
+        }
+
+       .game-container {
+            background-color: var(--panel-bg);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
             padding: 20px;
-            transition: background 0.6s var(--ease);
-        }
-
-        body::after {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .game-container {
-            background: var(--panel-bg);
-            backdrop-filter: blur(20px) saturate(1.2);
-            -webkit-backdrop-filter: blur(20px) saturate(1.2);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow);
-            padding: 24px;
-            max-width: 460px;
+            max-width: 440px;
             width: 100%;
             text-align: center;
-            border: 1px solid var(--panel-border);
+            border: 4px solid var(--border-color);
             outline: none;
-            transition: all 0.4s var(--ease);
         }
 
-        header h1 { 
-            font-family: 'Outfit', sans-serif;
-            font-size: 20px; 
-            margin-bottom: 4px;
-            font-weight: 700;
-            background: linear-gradient(90deg, var(--accent), var(--accent-2));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        header h2 { 
-            font-size: 12px; 
-            margin-bottom: 14px; 
-            opacity: 0.9; 
-            font-weight: 600; 
-            color: var(--danger);
-            letter-spacing: 0.3px;
-        }
+        header h1 { font-size: 20px; margin-bottom: 2px; font-weight: 700; }
+        header h2 { font-size: 12px; margin-bottom: 10px; opacity: 0.9; font-weight: 600; color: #ef4444; }
 
-        .game-status {
+       .game-status {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             font-size: 13px;
-            font-weight: 600;
-            background: oklch(0% 0 0 / 0.04);
-            padding: 8px 14px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--panel-border);
+            font-weight: bold;
+            background: rgba(0,0,0,0.06);
+            padding: 6px 12px;
+            border-radius: 8px;
         }
 
-        .building-wrapper {
-            position: relative;
-            margin: 0 auto;
-            width: 100%;
-            cursor: pointer;
-        }
+       .building-wrapper { position: relative; margin: 0 auto; width: 100%; cursor: pointer; }
 
-        .roof-section {
-            height: 84px;
-            background: linear-gradient(180deg, var(--roof), oklch(from var(--roof) l c h / 0.7));
-            border: 1px solid var(--panel-border);
+       .roof-section {
+            height: 80px;
+            background: linear-gradient(180deg, var(--roof-bg), rgba(0,0,0,0.05));
+            border: 4px solid var(--border-color);
             border-bottom: none;
-            border-top-left-radius: var(--radius-md);
-            border-top-right-radius: var(--radius-md);
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
             position: relative;
             overflow: hidden;
         }
 
-        .clothesline { 
-            position: absolute; 
-            bottom: 24px; 
-            left: 10%; 
-            width: 80%; 
-            height: 2px; 
-            background: oklch(40% 0.02 250 / 0.6);
-            border-radius: 2px;
-        }
-        .clothing { 
-            position: absolute; 
-            bottom: 8px; 
-            font-size: 22px; 
-            filter: drop-shadow(0 2px 4px oklch(0% 0 0 / 0.2));
-            animation: sway 3s ease-in-out infinite;
-        }
-        .clothing:nth-child(3) { animation-delay: -1s; }
-        .clothing:nth-child(4) { animation-delay: -2s; }
+       .clothesline { position: absolute; bottom: 20px; left: 10%; width: 80%; height: 2px; background-color: #475569; }
+       .clothing { position: absolute; bottom: 5px; font-size: 20px; }
+       .roof-target { position: absolute; bottom: 10px; font-size: 28px; z-index: 5; }
 
-        @keyframes sway {
-            0%, 100% { transform: rotate(-3deg); }
-            50% { transform: rotate(3deg); }
-        }
-
-        .roof-target { 
-            position: absolute; 
-            bottom: 12px; 
-            font-size: 30px; 
-            z-index: 5;
-            filter: drop-shadow(0 0 8px var(--danger) / 0.6);
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-        }
-
-        .building-grid {
+       .building-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(4, 88px);
-            border: 1px solid var(--panel-border);
-            background: oklch(0% 0 0 / 0.02);
+            grid-template-rows: repeat(4, 85px);
+            border: 4px solid var(--border-color);
+            background-color: rgba(255,255,255,0.02);
             position: relative;
-            border-radius: 0 0 var(--radius-md) var(--radius-md);
-            overflow: hidden;
         }
 
-        .basement-section {
-            height: 78px;
-            background: linear-gradient(180deg, oklch(60% 0.2 230), oklch(50% 0.2 230));
-            border: 1px solid var(--panel-border);
+       .basement-section {
+            height: 75px;
+            background-color: #0284c7;
+            border: 4px solid var(--border-color);
             border-top: none;
-            border-bottom-left-radius: var(--radius-md);
-            border-bottom-right-radius: var(--radius-md);
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
             position: relative;
             overflow: hidden;
             display: none;
         }
 
-        .water-wave {
+       .water-wave {
             position: absolute;
             bottom: 0; left: 0; width: 200%; height: 100%;
-            background: linear-gradient(0deg, oklch(55% 0.2 230 / 0.9) 70%, oklch(75% 0.15 220 / 0.6) 100%);
-            animation: wave 4s ease-in-out infinite;
+            background: linear-gradient(0deg, #0284c7 70%, #38bdf8 100%);
+            opacity: 0.8;
+            animation: wave 3s linear infinite;
         }
 
         @keyframes wave {
-            0% { transform: translateX(0) translateY(0) scaleY(1); }
-            50% { transform: translateX(-25%) translateY(4px) scaleY(1.05); }
-            100% { transform: translateX(-50%) translateY(0) scaleY(1); }
+            0% { transform: translateX(0) translateY(0); }
+            50% { transform: translateX(-25%) translateY(4px); }
+            100% { transform: translateX(-50%) translateY(0); }
         }
 
-        .room { 
-            border: 1px solid oklch(from var(--text) l c h / 0.15); 
-            position: relative; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            background: oklch(100% 0 0 / 0.02);
-        }
-        .room.left-edge { border-left: 1px solid var(--panel-border); }
-        .room.right-edge { border-right: 1px solid var(--panel-border); }
-        .room.top-edge { border-top: 1px solid var(--panel-border); }
-        .room.bottom-edge { border-bottom: 1px solid var(--panel-border); }
+       .room { border: 2px solid var(--inner-wall); position: relative; display: flex; align-items: center; justify-content: center; }
+       .room.left-edge { border-left: 4px solid var(--border-color); }
+       .room.right-edge { border-right: 4px solid var(--border-color); }
+       .room.top-edge { border-top: 4px solid var(--border-color); }
+       .room.bottom-edge { border-bottom: 4px solid var(--border-color); }
 
-        .ladder {
-            position: absolute; 
-            width: 22px; 
-            height: 100%; 
-            left: 50%; 
-            transform: translateX(-50%);
-            background: repeating-linear-gradient(0deg, var(--ladder), var(--ladder) 6px, transparent 6px, transparent 14px);
-            border-left: 3px solid var(--ladder); 
-            border-right: 3px solid var(--ladder); 
-            z-index: 2;
-            border-radius: 2px;
-            box-shadow: inset 0 0 0 1px oklch(0% 0 0 / 0.1);
+       .ladder {
+            position: absolute; width: 20px; height: 100%; left: 50%; transform: translateX(-50%);
+            background: repeating-linear-gradient(0deg, var(--ladder-color), var(--ladder-color) 5px, transparent 5px, transparent 12px);
+            border-left: 4px solid var(--ladder-color); border-right: 4px solid var(--ladder-color); z-index: 2;
         }
 
-        .door { 
-            position: absolute; 
-            width: 14px; 
-            height: 48px; 
-            background: linear-gradient(90deg, var(--door), oklch(from var(--door) calc(l - 0.1) c h)); 
-            bottom: 0; 
-            z-index: 3; 
-            border-radius: 6px 6px 0 0;
-            box-shadow: 0 0 12px oklch(from var(--door) l c h / 0.4);
-        }
-        .door.left { left: -7px; }
-        .door.right { right: -7px; }
+       .door { position: absolute; width: 12px; height: 45px; background-color: var(--door-color); bottom: 0; z-index: 3; border-radius: 4px 4px 0 0; }
+       .door.left { left: -6px; }
+       .door.right { right: -6px; }
 
-        .trapdoor { 
-            position: absolute; 
-            width: 36px; 
-            height: 10px; 
-            background: oklch(15% 0.02 250); 
-            border: 2px solid oklch(85% 0.01 250); 
-            border-radius: 6px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            z-index: 4;
-            box-shadow: 0 2px 6px oklch(0% 0 0 / 0.3);
-        }
-        .trapdoor.top { top: -5px; }
-        .trapdoor.bottom { bottom: -5px; }
+       .trapdoor { position: absolute; width: 34px; height: 8px; background: #0f172a; border: 2px solid #e2e8f0; border-radius: 4px; left: 50%; transform: translateX(-50%); z-index: 4; }
+       .trapdoor.top { top: -4px; }
+       .trapdoor.bottom { bottom: -4px; }
 
-        .target-marker { 
-            position: absolute; 
-            font-size: 28px; 
-            z-index: 5;
-            filter: drop-shadow(0 0 10px var(--accent) / 0.8);
-            animation: bounce 2s ease-in-out infinite;
-        }
+       .target-marker { position: absolute; font-size: 26px; z-index: 5; }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
-
-        .character {
-            width: 44px; 
-            height: 44px; 
-            background: radial-gradient(circle at 30% 30%, oklch(from var(--danger) calc(l + 0.1) c h), var(--danger));
-            border-radius: 50%;
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 24px;
-            position: absolute; 
-            z-index: 10; 
-            box-shadow: 0 6px 16px oklch(from var(--danger) l c h / 0.4),
-                        inset 0 -2px 4px oklch(0% 0 0 / 0.2);
-            transition: all 0.25s var(--ease);
+       .character {
+            width: 40px; height: 40px; background-color: #ef4444; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 22px;
+            position: absolute; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.15s cubic-bezier(0.25, 1, 0.5, 1);
             pointer-events: none;
-            border: 2px solid oklch(100% 0 0 / 0.3);
         }
 
-        .controls-dpad {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 20px 0 8px 0;
-            gap: 6px;
+       .controls-dpad { display: flex; flex-direction: column; align-items: center; margin: 15px 0 5px 0; gap: 4px; }
+       .dpad-row { display: flex; gap: 4px; }
+       .btn-dpad {
+            width: 46px; height: 46px; background-color: var(--accent-color);
+            color: white; border: none; border-radius: 10px; font-size: 18px;
+            font-weight: bold; cursor: pointer; display: flex; align-items: center;
+            justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            transition: transform 0.1s, background-color 0.2s;
         }
-        .dpad-row { display: flex; gap: 6px; }
-        
-        .btn-dpad {
-            width: 52px; 
-            height: 52px; 
-            background: linear-gradient(180deg, var(--accent), oklch(from var(--accent) calc(l - 0.08) c h));
-            color: white; 
-            border: none; 
-            border-radius: var(--radius-md); 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center;
-            justify-content: center; 
-            box-shadow: 0 4px 12px oklch(from var(--accent) l c h / 0.3),
-                        inset 0 1px 0 oklch(100% 0 0 / 0.2);
-            transition: all 0.15s var(--ease);
-            position: relative;
-            overflow: hidden;
-        }
-        .btn-dpad:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 6px 16px oklch(from var(--accent) l c h / 0.4),
-                        inset 0 1px 0 oklch(100% 0 0 / 0.2);
-        }
-        .btn-dpad:active { 
-            transform: scale(0.95) translateY(0); 
-            filter: brightness(0.9); 
-        }
-        .btn-dpad svg { width: 22px; height: 22px; }
-        .dpad-spacer { width: 52px; height: 52px; }
+       .btn-dpad:active { transform: scale(0.92); filter: brightness(0.9); }
+       .dpad-spacer { width: 46px; height: 46px; }
 
-        .system-buttons { 
-            display: flex; 
-            gap: 12px; 
-            margin-top: 14px; 
-        }
-        .btn-sys { 
-            flex: 1; 
-            padding: 12px; 
-            border: 1px solid var(--panel-border);
-            border-radius: var(--radius-sm); 
-            font-weight: 600; 
-            cursor: pointer; 
-            background: var(--panel-bg);
-            color: var(--text); 
-            transition: all 0.2s var(--ease); 
-            font-size: 13px;
-            backdrop-filter: blur(10px);
-        }
-        .btn-sys.primary { 
-            background: linear-gradient(180deg, var(--success), oklch(from var(--success) calc(l - 0.08) c h));
-            color: white;
-            border: none;
-            box-shadow: 0 4px 12px oklch(from var(--success) l c h / 0.3);
-        }
-        .btn-sys:hover { 
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px oklch(0% 0 0 / 0.1);
-        }
-        .btn-sys.primary:hover {
-            box-shadow: 0 6px 16px oklch(from var(--success) l c h / 0.4);
-        }
-        
-        .tip { 
-            margin-top: 12px; 
-            font-size: 11px; 
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-        }
+       .system-buttons { display: flex; gap: 10px; margin-top: 10px; }
+       .btn-sys { flex: 1; padding: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; background-color: #64748b; color: white; transition: all 0.2s; font-size: 13px; }
+       .btn-sys.primary { background-color: #10b981; }
+       .btn-sys:hover { opacity: 0.9; }
 
-        .modal { 
-            display: none; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: oklch(0% 0 0 / 0.5);
-            backdrop-filter: blur(8px);
-            align-items: center; 
-            justify-content: center; 
-            z-index: 100;
-            animation: fadeIn 0.3s var(--ease);
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .modal-content { 
-            background: var(--panel-bg);
-            backdrop-filter: blur(30px) saturate(1.3);
-            color: var(--text); 
-            padding: 32px; 
-            border-radius: var(--radius-lg); 
-            text-align: center; 
-            max-width: 380px; 
-            width: calc(100% - 40px);
-            border: 1px solid var(--panel-border);
-            box-shadow: var(--shadow);
-            animation: slideUp 0.4s var(--ease);
-        }
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        .modal h2, .modal h3 { 
-            font-family: 'Outfit', sans-serif;
-            color: var(--success); 
-            margin-bottom: 10px; 
-            font-size: 22px; 
-        }
-        .modal p { 
-            margin-bottom: 18px; 
-            font-size: 14px;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-        .modal button { 
-            padding: 12px 24px; 
-            background: linear-gradient(180deg, var(--accent), oklch(from var(--accent) calc(l - 0.08) c h));
-            color: white; 
-            border: none; 
-            border-radius: var(--radius-sm); 
-            font-weight: 600; 
-            cursor: pointer;
-            box-shadow: 0 4px 12px oklch(from var(--accent) l c h / 0.3);
-            transition: all 0.2s var(--ease);
-        }
-        .modal button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px oklch(from var(--accent) l c h / 0.4);
-        }
+       .tip { margin-top: 8px; font-size: 11px; opacity: 0.7; }
 
-        .lingo-box {
-            width: 46px; 
-            height: 46px; 
-            border: 2px solid var(--panel-border);
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            font-weight: 700; 
-            font-size: 20px; 
-            border-radius: var(--radius-sm);
-            text-transform: uppercase; 
-            color: var(--text); 
-            background: oklch(0% 0 0 / 0.03);
-            transition: all 0.3s var(--ease);
+       .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 100; }
+       .modal-content { background: var(--panel-bg); color: var(--text-color); padding: 25px; border-radius: 20px; text-align: center; max-width: 360px; width: 100%; border: 3px solid var(--border-color); }
+       .modal h2,.modal h3 { color: #10b981; margin-bottom: 8px; font-size: 20px; }
+       .modal p { margin-bottom: 15px; font-size: 14px; }
+       .modal button { padding: 10px 20px; background: var(--accent-color); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+       .lingo-box {
+            width: 42px; height: 42px; border: 2px solid var(--border-color);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 18px; border-radius: 6px;
+            text-transform: uppercase; color: var(--text-color); background: transparent;
+            transition: all 0.2s ease;
         }
-        .lingo-input-style {
-            width: 100%; 
-            padding: 14px; 
-            text-align: center; 
-            font-size: 22px;
-            text-transform: uppercase; 
-            letter-spacing: 8px; 
-            border: 2px solid var(--panel-border);
-            border-radius: var(--radius-sm); 
-            margin-bottom: 12px; 
-            background: oklch(0% 0 0 / 0.03);
-            color: var(--text); 
-            outline: none; 
-            font-weight: 700;
-            transition: all 0.2s var(--ease);
-        }
-        .lingo-input-style:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px oklch(from var(--accent) l c h / 0.2);
+       .lingo-input-style {
+            width: 100%; padding: 12px; text-align: center; font-size: 20px;
+            text-transform: uppercase; letter-spacing: 6px; border: 2px solid var(--border-color);
+            border-radius: 10px; margin-bottom: 10px; background: rgba(0,0,0,0.04);
+            color: var(--text-color); outline: none; font-weight: bold;
         }
     </style>
 </head>
 <body>
+
     <div class="game-container" id="gameContainer" tabindex="0">
         <header>
             <h1 id="level-name">Yükleniyor...</h1>
@@ -533,40 +243,23 @@
 
         <div class="controls-dpad">
             <div class="dpad-row">
-                <button class="btn-dpad" onclick="move(-1, 0)" aria-label="Yukarı">
-                    <i data-lucide="chevron-up"></i>
-                </button>
+                <button class="btn-dpad" onclick="move(-1, 0)">▲</button>
             </div>
             <div class="dpad-row">
-                <button class="btn-dpad" onclick="move(0, -1)" aria-label="Sol">
-                    <i data-lucide="chevron-left"></i>
-                </button>
+                <button class="btn-dpad" onclick="move(0, -1)">◀</button>
                 <div class="dpad-spacer"></div>
-                <button class="btn-dpad" onclick="move(0, 1)" aria-label="Sağ">
-                    <i data-lucide="chevron-right"></i>
-                </button>
+                <button class="btn-dpad" onclick="move(0, 1)">▶</button>
             </div>
             <div class="dpad-row">
-                <button class="btn-dpad" onclick="move(1, 0)" aria-label="Aşağı">
-                    <i data-lucide="chevron-down"></i>
-                </button>
+                <button class="btn-dpad" onclick="move(1, 0)">▼</button>
             </div>
         </div>
 
         <div class="system-buttons">
-            <button class="btn-sys" onclick="resetLevel()">
-                <i data-lucide="rotate-ccw" style="width:14px;height:14px;margin-right:4px;vertical-align:-2px;"></i>
-                Sıfırla
-            </button>
-            <button class="btn-sys primary" onclick="skipLevel()">
-                <i data-lucide="skip-forward" style="width:14px;height:14px;margin-right:4px;vertical-align:-2px;"></i>
-                Seviye Atla
-            </button>
+            <button class="btn-sys" onclick="resetLevel()">Sıfırla</button>
+            <button class="btn-sys primary" onclick="skipLevel()">Seviye Atla</button>
         </div>
-        <p class="tip">
-            <i data-lucide="keyboard" style="width:12px;height:12px;"></i>
-            Yön Tuşları / WASD ile de oynayabilirsin
-        </p>
+        <p class="tip">Ekrandaki oklara basabilir veya klavyeden Yön Tuşları / WASD kullanabilirsiniz.</p>
     </div>
 
     <div class="modal" id="winModal">
@@ -580,16 +273,406 @@
     <div class="modal" id="lingoModal">
         <div class="modal-content">
             <h3>🔐 Şifreli Elektronik Kilit</h3>
-            <p id="lingo-hint" style="font-weight: 600; font-size:13px; color: var(--danger); margin-top:5px;"></p>
-            
-            <div id="lingo-grid" style="display: flex; flex-direction: column; gap: 6px; align-items: center; margin: 18px 0;"></div>
-            
+            <p id="lingo-hint" style="font-weight: 600; font-size:13px; color: #ef4444; margin-top:5px;"></p>
+
+            <div id="lingo-grid" style="display: flex; flex-direction: column; gap: 5px; align-items: center; margin: 15px 0;"></div>
+
             <input type="text" id="lingo-input" class="lingo-input-style" autocomplete="off" onkeydown="if(event.key === 'Enter') checkLingoGuess()">
-            <button class="btn-sys primary" style="width:100%; padding: 14px;" onclick="checkLingoGuess()">
-                Şifreyi Gönder
-            </button>
-            <p id="lingo-error" style="color: var(--danger); font-size: 12px; margin-top: 10px; font-weight: 600;"></p>
+            <button class="btn-sys primary" style="width:100%; padding: 12px;" onclick="checkLingoGuess()">Şifreyi Gönder</button>
+            <p id="lingo-error" style="color: #ef4444; font-size: 12px; margin-top: 8px; font-weight: bold;"></p>
         </div>
     </div>
 
     <script>
+        const levels = [
+            {
+                name: "1. Kat: Yağmurlu Çatı Katı", task: "Görev: Yukarı tırman, kıyafetleri kurtar!", theme: "default", type: "roof",
+                start: { r: 3, c: 3 }, target: { r: -1, c: 0 },
+                grid: [
+                    [{ up: true, down: false, left: false, right: true }, { up: false, down: false, left: true, right: true }, { up: false, down: true, left: true, right: false }, { up: false, down: false, left: false, right: false }],
+                    [{ up: false, down: true, left: false, right: false }, { up: false, down: false, left: false, right: true }, { up: true, down: true, left: true, right: false }, { up: false, down: true, left: false, right: false }],
+                    [{ up: true, down: false, left: false, right: true }, { up: false, down: true, left: true, right: false }, { up: true, down: false, left: false, right: true }, { up: true, down: true, left: true, right: false }],
+                    [{ up: false, down: false, left: false, right: true }, { up: true, down: false, left: true, right: false }, { up: false, down: false, left: false, right: true }, { up: true, down: false, left: true, right: false }]
+                ]
+            },
+            {
+                name: "2. Kat: Gizemli Gece", task: "Görev: Yukarı tırman, kıyafetleri kurtar!", theme: "night", type: "roof",
+                start: { r: 3, c: 0 }, target: { r: -1, c: 2 },
+                grid: [
+                    [{ up: false, down: true, left: false, right: true }, { up: false, down: false, left: true, right: false }, { up: true, down: true, left: false, right: true }, { up: false, down: false, left: true, right: false }],
+                    [{ up: true, down: false, left: false, right: true }, { up: false, down: true, left: true, right: true }, { up: true, down: false, left: true, right: false }, { up: false, down: true, left: false, right: false }],
+                    [{ up: false, down: true, left: false, right: false }, { up: true, down: false, left: false, right: true }, { up: false, down: true, left: true, right: true }, { up: true, down: false, left: true, right: false }],
+                    [{ up: true, down: false, left: false, right: true }, { up: false, down: false, left: true, right: true }, { up: true, down: false, left: true, right: false }, { up: false, down: false, left: false, right: false }]
+                ]
+            },
+            {
+                name: "3. Kat: Siber Gelecek Kulesi", task: "Görev: Çatı kapısını hackle ve yukarı sız!", theme: "cyber", type: "roof",
+                start: { r: 3, c: 3 }, target: { r: -1, c: 3 },
+                grid: [
+                    [{ up: false, down: true, left: false, right: true }, { up: false, down: false, left: true, right: true }, { up: false, down: true, left: true, right: true }, { up: true, down: false, left: true, right: false }],
+                    [{ up: true, down: true, left: false, right: false }, { up: false, down: true, left: false, right: true }, { up: true, down: false, left: true, right: false }, { up: false, down: true, left: false, right: false }],
+                    [{ up: true, down: true, left: false, right: true }, { up: true, down: false, left: true, right: false }, { up: false, down: true, left: false, right: true }, { up: true, down: true, left: true, right: false }],
+                    [{ up: true, down: false, left: false, right: true }, { up: false, down: false, left: true, right: true }, { up: true, down: false, left: true, right: true }, { up: true, down: false, left: true, right: false }]
+                ]
+            },
+            {
+                name: "4. Kat: Su Baskını - Giriş", task: "⚠ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood1", type: "basement",
+                start: { r: -1, c: 0 }, target: { r: 4, c: 3 },
+                grid: [
+                    [{ up: true, down: true, left: false, right: true }, { up: false, down: true, left: true, right: false }, { up: false, down: true, left: false, right: true }, { up: false, down: false, left: true, right: false }],
+                    [{ up: true, down: true, left: false, right: false }, { up: true, down: false, left: false, right: true }, { up: true, down: true, left: true, right: false }, { up: false, down: true, left: false, right: false }],
+                    [{ up: true, down: false, left: false, right: true }, { up: false, down: true, left: true, right: false }, { up: true, down: true, left: false, right: true }, { up: true, down: true, left: true, right: false }],
+                    [{ up: false, down: false, left: false, right: true }, { up: true, down: false, left: true, right: true }, { up: true, down: false, left: true, right: false }, { up: true, down: true, left: false, right: false }]
+                ]
+            },
+            {
+                name: "5. Kat: Antik Su Sarnıcı", task: "⚠ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood2", type: "basement",
+                start: { r: -1, c: 2 }, target: { r: 4, c: 0 },
+                grid: [
+                    [{ up: false, down: true, left: false, right: true }, { up: false, down: true, left: true, right: true }, { up: true, down: true, left: true, right: false }, { up: false, down: false, left: false, right: false }],
+                    [{ up: true, down: true, left: false, right: false }, { up: true, down: false, left: false, right: true }, { up: true, down: true, left: true, right: false }, { up: false, down: true, left: false, right: false }],
+                    [{ up: true, down: false, left: false, right: true }, { up: false, down: true, left: true, right: true }, { up: true, down: false, left: true, right: false }, { up: true, down: true, left: false, right: false }],
+                    [{ up: false, down: true, left: false, right: true }, { up: true, down: false, left: true, right: true }, { up: false, down: false, left: true, right: true }, { up: true, down: false, left: true, right: false }]
+                ]
+            },
+            {
+                name: "6. Kat: Sualtı Laboratuvarı", task: "⚠ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood3", type: "basement",
+                start: { r: -1, c: 1 }, target: { r: 4, c: 2 },
+                grid: [
+                    [{ up: false, down: true, left: false, right: true }, { up: true, down: true, left: true, right: false }, { up: false, down: true, left: false, right: true }, { up: false, down: true, left: true, right: false }],
+                    [{ up: true, down: false, left: false, right: true }, { up: true, down: true, left: true, right: true }, { up: true, down: true, left: true, right: false }, { up: true, down: true, left: false, right: false }],
+                    [{ up: false, down: true, left: false, right: true }, { up: true, down: true, left: true, right: false }, { up: true, down: false, left: false, right: true }, { up: true, down: false, left: true, right: false }],
+                    [{ up: true, down: false, left: false, right: true }, { up: true, down: false, left: true, right: true }, { up: false, down: true, left: true, right: false }, { up: false, down: false, left: false, right: false }]
+                ]
+            },
+            {
+                name: "7. Kat: Batık Şehir Metrosu", task: "⚠ ACİL GÖREV: Aşağı in, kediyi su basmadan kurtar!", theme: "flood4", type: "basement",
+                start: { r: -1, c: 3 }, target: { r: 4, c: 1 },
+                grid: [
+                    [{ up: false, down: true, left: false, right: true }, { up: false, down: true, left: true, right: false }, { up: false, down: true, left: false, right: true }, { up: true, down: true, left: true, right: false }],
+                    [{ up: true, down: true, left: false, right: true }, { up: true, down: false, left: true, right: true }, { up: true, down: false, left: true, right: false }, { up: true, down: true, left: false, right: false }],
+                    [{ up: true, down: false, left: false, right: true }, { up: false, down: true, left: true, right: true }, { up: false, down: true, left: true, right: true }, { up: true, down: true, left: true, right: false }],
+                    [{ up: false, down: false, left: false, right: true }, { up: true, down: true, left: true, right: false }, { up: true, down: false, left: false, right: true }, { up: true, down: false, left: true, right: false }]
+                ]
+            },
+            {
+                name: "8. Kat: Büyük Okyanus Sığınağı", task: "⚠ Görev: Labirenti geç ve güvenli bölgeye sız!", theme: "flood5", type: "basement",
+                start: { r: -1, c: 0 }, target: { r: 4, c: 3 },
+                grid: [
+                    [{ up: true, down: true, left: false, right: true }, { up: false, down: false, left: true, right: true }, { up: false, down: true, left: true, right: false }, { up: false, down: true, left: false, right: false }],
+                    [{ up: true, down: false, left: false, right: false }, { up: false, down: true, left: false, right: true }, { up: true, down: false, left: true, right: true }, { up: true, down: true, left: true, right: false }],
+                    [{ up: false, down: true, left: false, right: true }, { up: true, down: true, left: true, right: false }, { up: false, down: true, left: false, right: false }, { up: true, down: false, left: false, right: false }],
+                    [{ up: true, down: false, left: false, right: true }, { up: true, down: false, left: true, right: true }, { up: true, down: false, left: true, right: false }, { up: false, down: true, left: false, right: false }]
+                ]
+            },
+            {
+                name: "9. Kat: Termometrenin Yükselişi", task: "🥵 GÖREV: Çatı katındaki dede sıcaktan bunaldı, yukarı tırman!", theme: "hot", type: "grandpa",
+                start: { r: 3, c: 0 }, target: { r: -1, c: 2 },
+                grid: [
+                    [{ up: false, down: true, left: false, right: true }, { up: false, down: false, left: true, right: true }, { up: true, down: true, left: true, right: false }, { up: false, down: false, left: false, right: false }],
+                    [{ up: true, down: false, left: false, right: true }, { up: false, down: true, left: true, right: false }, { up: true, down: false, left: false, right: true }, { up: false, down: true, left: true, right: false }],
+                    [{ up: false, down: true, left: false, right: false }, { up: true, down: true, left: false, right: true }, { up: false, down: true, left: true, right: true }, { up: true, down: false, left: true, right: false }],
+                    [{ up: true, down: false, left: false, right: true }, { up: true, down: false, left: true, right: false }, { up: true, down: false, left: false, right: true }, { up: false, down: false, left: true, right: false }]
+                ]
+            },
+            {
+                name: "10. Kat: Betonarme Çölü", task: "🥵 GÖREV: Klima bozuldu! Dedeye ulaşmak için engelleri aş!", theme: "hot", type: "grandpa",
+                start: { r: 3, c: 2 }, target: { r: -1, c: 1 },
+                grid: [
+                    [{ up: false, down: true, left: false, right: true }, { up: true, down: true, left: true, right: false }, { up: false, down: true, left: false, right: true }, { up: false, down: false, left: true, right: false }],
+                    [{ up: true, down: true, left: false, right: false }, { up: true, down: false, left: false, right: true }, { up: true, down: false, left: true, right: true }, { up: false, down: true, left: true, right: false }],
+                    [{ up: true, down: false, left: false, right: true }, { up: false, down: true, left: true, right: false }, { up: false, down: true, left: false, right: true }, { up: true, down: true, left: true, right: false }],
+                    [{ up: false, down: false, left: false, right: true }, { up: true, down: false, left: true, right: true }, { up: true, down: false, left: true, right: false }, { up: true, down: false, left: false, right: false }]
+                ]
+            },
+            {
+                name: "11. Kat: Kavurucu Sıcaklar (FİNAL)", task: "🔥 FİNAL GÖREVİ: Şifreyi kır, çatı kapısını aç ve dedeyi serinlet!", theme: "hot", type: "grandpa",
+                start: { r: 3, c: 3 }, target: { r: -1, c: 2 },
+                grid: [
+                    [{ up: false, down: true, left: false, right: true }, { up: false, down: true, left: true, right: false }, { up: true, down: true, left: false, right: true }, { up: false, down: false, left: true, right: false }],
+                    [{ up: true, down: false, left: false, right: false }, { up: true, down: true, left: false, right: true }, { up: true, down: false, left: true, right: false }, { up: false, down: true, left: false, right: false }],
+                    [{ up: false, down: true, left: false, right: true }, { up: true, down: false, left: true, right: false }, { up: false, down: true, left: false, right: true }, { up: true, down: true, left: true, right: false }],
+                    [{ up: true, down: false, left: false, right: true }, { up: false, down: false, left: true, right: true }, { up: true, down: false, left: true, right: true }, { up: true, down: false, left: true, right: false }]
+                ]
+            }
+        ];
+
+        let currentLevel = 0;
+        let moveCount = 0;
+        let pPos = { r: 0, c: 0 };
+
+        let lingoSecretWord = "";
+        let lingoAttempts = 0;
+        const maxLingoAttempts = 5;
+
+        const gridEl = document.getElementById('grid');
+        const playerEl = document.getElementById('player');
+        const roofEl = document.getElementById('roof');
+        const basementEl = document.getElementById('basement');
+        const kittenTargetEl = document.getElementById('kitten-target');
+        const clotheslineEl = document.getElementById('clothesline');
+        const grandpaEl = document.getElementById('roof-grandpa');
+
+        function initGame() {
+            gridEl.innerHTML = '';
+            const lvl = levels[currentLevel];
+            pPos = {...lvl.start };
+            moveCount = 0;
+
+            document.getElementById('level-name').innerText = lvl.name;
+            document.getElementById('level-task').innerText = lvl.task;
+            document.getElementById('level-idx').innerText = `Seviye: ${currentLevel + 1} / ${levels.length}`;
+            document.getElementById('moves').innerText = `Hamle: ${moveCount}`;
+
+            document.body.className = '';
+            if(lvl.theme!== 'default') document.body.classList.add('theme-' + lvl.theme);
+
+            if (lvl.type === "roof" || lvl.type === "grandpa") {
+                basementEl.style.display = 'none';
+                roofEl.style.borderBottomLeftRadius = '0';
+                roofEl.style.borderBottomRightRadius = '0';
+                gridEl.style.borderBottomLeftRadius = '16px';
+                gridEl.style.borderBottomRightRadius = '16px';
+
+                if (lvl.type === "grandpa") {
+                    clotheslineEl.style.display = 'none';
+                    document.querySelectorAll('.clothing').forEach(c => c.style.display = 'none');
+                    grandpaEl.style.display = 'block';
+                    grandpaEl.style.left = `calc(${12.5 + (lvl.target.c * 25)}% - 20px)`;
+                } else {
+                    clotheslineEl.style.display = 'block';
+                    document.querySelectorAll('.clothing').forEach(c => c.style.display = 'block');
+                    grandpaEl.style.display = 'none';
+                }
+            } else {
+                basementEl.style.display = 'block';
+                clotheslineEl.style.display = 'none';
+                grandpaEl.style.display = 'none';
+                document.querySelectorAll('.clothing').forEach(c => c.style.display = 'none');
+                gridEl.style.borderBottomLeftRadius = '0';
+                gridEl.style.borderBottomRightRadius = '0';
+                kittenTargetEl.style.left = `calc(${12.5 + (lvl.target.c * 25)}% - 13px)`;
+            }
+
+            for (let r = 0; r < 4; r++) {
+                for (let c = 0; c < 4; c++) {
+                    const cell = lvl.grid[r][c];
+                    const room = document.createElement('div');
+                    room.className = 'room';
+                    room.dataset.row = r;
+                    room.dataset.col = c;
+
+                    if (c === 0) room.classList.add('left-edge');
+                    if (c === 3) room.classList.add('right-edge');
+                    if (r === 0) room.classList.add('top-edge');
+                    if (r === 3) room.classList.add('bottom-edge');
+
+                    if (cell.up) {
+                        const ladder = document.createElement('div');
+                        ladder.className = 'ladder';
+                        room.appendChild(ladder);
+
+                        const trap = document.createElement('div');
+                        trap.className = 'trapdoor top';
+                        room.appendChild(trap);
+                    }
+                    if (cell.down) {
+                        const trap = document.createElement('div');
+                        trap.className = 'trapdoor bottom';
+                        room.appendChild(trap);
+                    }
+                    if (cell.right && c < 3) {
+                        const door = document.createElement('div');
+                        door.className = 'door right';
+                        room.appendChild(door);
+                    }
+                    if (cell.left && c > 0) {
+                        const door = document.createElement('div');
+                        door.className = 'door left';
+                        room.appendChild(door);
+                    }
+
+                    if(r === 0 && cell.up) {
+                        const roofLadder = document.createElement('div');
+                        roofLadder.className = 'ladder';
+                        roofLadder.style.bottom = '0';
+                        room.appendChild(roofLadder);
+                    }
+
+                    gridEl.appendChild(room);
+                }
+            }
+
+            updatePlayerPosition();
+            document.getElementById('gameContainer').focus();
+        }
+
+        function updatePlayerPosition() {
+            const lvl = levels[currentLevel];
+
+            if (pPos.r === lvl.target.r && pPos.c === lvl.target.c) {
+                renderPlayerAtFinal(lvl.target.r, lvl.target.c);
+                setTimeout(() => {
+                    if (currentLevel === 2 || currentLevel === 7 || currentLevel === 10) {
+                        startLingoGame();
+                    } else {
+                        showWinModal(lvl);
+                    }
+                }, 180);
+                return;
+            }
+
+            if (pPos.r === -1) {
+                roofEl.appendChild(playerEl);
+                playerEl.style.top = '32px';
+                playerEl.style.left = `calc(${12.5 + (pPos.c * 25)}% - 20px)`;
+            }
+            else if (pPos.r === 4) {
+                basementEl.appendChild(playerEl);
+                playerEl.style.top = '15px';
+                playerEl.style.left = `calc(${12.5 + (pPos.c * 25)}% - 20px)`;
+            }
+            else {
+                const activeRoom = document.querySelector(`[data-row="${pPos.r}"][data-col="${pPos.c}"]`);
+                if (activeRoom) {
+                    activeRoom.appendChild(playerEl);
+                    playerEl.style.top = '22px';
+                    playerEl.style.left = 'calc(50% - 20px)';
+                }
+            }
+        }
+
+        function renderPlayerAtFinal(tr, tc) {
+            if (tr === -1) {
+                roofEl.appendChild(playerEl);
+                playerEl.style.top = '32px';
+                playerEl.style.left = `calc(${12.5 + (tc * 25)}% - 20px)`;
+            } else if (tr === 4) {
+                basementEl.appendChild(playerEl);
+                playerEl.style.top = '15px';
+                playerEl.style.left = `calc(${12.5 + (tc * 25)}% - 20px)`;
+            }
+        }
+
+        function startLingoGame() {
+            let word = "";
+            let hint = "";
+
+            if (currentLevel === 2) {
+                word = "ÇATI";
+                hint = "Çatı katı kapısı kilitlendi! Açmak için 4 harfli şifreyi bulun.";
+            } else if (currentLevel === 7) {
+                word = "MİYAV";
+                hint = "Kafes Şifrelenmiş! Kediyi kurtarmak için 5 harfli şifreyi çözün.";
+            } else if (currentLevel === 10) {
+                word = "SICAK";
+                hint = "Güneş Paneli Kilidi! Dedeyi sıcaktan kurtarmak için 5 harfli şifreyi bulun.";
+            }
+
+            lingoSecretWord = word;
+            lingoAttempts = 0;
+
+            document.getElementById('lingo-hint').innerText = hint;
+            document.getElementById('lingo-error').innerText = "";
+
+            const inputEl = document.getElementById('lingo-input');
+            inputEl.value = "";
+            inputEl.maxLength = word.length;
+
+            const gridEl = document.getElementById('lingo-grid');
+            gridEl.innerHTML = "";
+            for (let i = 0; i < maxLingoAttempts; i++) {
+                const row = document.createElement('div');
+                row.style.display = 'flex';
+                row.style.gap = '5px';
+                for (let j = 0; j < word.length; j++) {
+                    const box = document.createElement('div');
+                    box.className = 'lingo-box';
+                    box.id = `l-box-${i}-${j}`;
+                    row.appendChild(box);
+                }
+                gridEl.appendChild(row);
+            }
+
+            document.getElementById('lingoModal').style.display = 'flex';
+            setTimeout(() => inputEl.focus(), 50);
+        }
+
+        function checkLingoGuess() {
+            const inputEl = document.getElementById('lingo-input');
+            const errorEl = document.getElementById('lingo-error');
+            let guess = inputEl.value.toLocaleUpperCase('tr-TR').trim();
+
+            if (guess.length!== lingoSecretWord.length) {
+                errorEl.innerText = `Hata: Şifre tam olarak ${lingoSecretWord.length} harfli olmalı!`;
+                return;
+            }
+            errorEl.innerText = "";
+
+            let secretArr = lingoSecretWord.split('');
+            let guessArr = guess.split('');
+            let rowIdx = lingoAttempts;
+            let statuses = Array(lingoSecretWord.length).fill('gray');
+
+            for (let i = 0; i < lingoSecretWord.length; i++) {
+                if (guessArr[i] === secretArr[i]) {
+                    statuses[i] = 'green';
+                    secretArr[i] = null;
+                    guessArr[i] = null;
+                }
+            }
+
+            for (let i = 0; i < lingoSecretWord.length; i++) {
+                if (guessArr[i]!== null) {
+                    let sIdx = secretArr.indexOf(guessArr[i]);
+                    if (sIdx!== -1) {
+                        statuses[i] = 'yellow';
+                        secretArr[sIdx] = null;
+                    }
+                }
+            }
+
+            for (let i = 0; i < lingoSecretWord.length; i++) {
+                const box = document.getElementById(`l-box-${rowIdx}-${i}`);
+                box.innerText = guess[i];
+                box.style.color = '#ffffff';
+                if (statuses[i] === 'green') {
+                    box.style.backgroundColor = '#10b981';
+                    box.style.borderColor = '#10b981';
+                } else if (statuses[i] === 'yellow') {
+                    box.style.backgroundColor = '#eab308';
+                    box.style.borderColor = '#eab308';
+                } else {
+                    box.style.backgroundColor = '#64748b';
+                    box.style.borderColor = '#64748b';
+                }
+            }
+
+            lingoAttempts++;
+            inputEl.value = "";
+            inputEl.focus();
+
+            if (guess === lingoSecretWord) {
+                setTimeout(() => {
+                    document.getElementById('lingoModal').style.display = 'none';
+                    showWinModal(levels[currentLevel]);
+                }, 600);
+                return;
+            }
+
+            if (lingoAttempts >= maxLingoAttempts) {
+                errorEl.innerText = "Sistem Bloke Oldu! Şifre Modülü Yeniden Başlatılıyor...";
+                setTimeout(() => {
+                    startLingoGame();
+                }, 2000);
+            }
+        }
+
+        function showWinModal(lvl) {
+            const modalTitle = document.getElementById('modal-title');
+            const modalDesc = document.getElementById('modal-desc');
+            const nextBtn = document.getElementById('next-btn');
+
+            if (currentLevel === levels.length - 1) {
+                modalTitle.innerText = "🏆 MUHTEŞEM ZAFER! 🏆";
+                modalDesc.innerText = "Tüm şifreleri kırdın, labirentleri aşt
