@@ -9,8 +9,8 @@
             --bg-color: #f4f7f6;
             --panel-bg: #ffffff;
             --text-color: #2c3e50;
-            --border-color: #1e293b; /* Duvarlar için daha keskin, koyu renk */
-            --inner-wall: #475569;   /* Odalar arası kalın belirgin duvar rengi */
+            --border-color: #1e293b; 
+            --inner-wall: #475569;   
             --ladder-color: #8a7355;
             --door-color: #ffff00;
             --accent-color: #3b82f6;
@@ -199,7 +199,6 @@
             100% { transform: translateX(-50%) translateY(0); }
         }
 
-        /* İç oda sınırlarını belirgin ve kalın duvar haline getirdik */
         .room { 
             border: 2px solid var(--inner-wall); 
             position: relative; 
@@ -383,7 +382,7 @@
                     [{ up: false, down: true, left: false, right: true },   { up: false, down: false, left: true, right: true },   { up: false, down: true, left: true, right: true },   { up: true, down: false, left: true, right: false }],
                     [{ up: true, down: true, left: false, right: false },   { up: false, down: true, left: false, right: true },   { up: true, down: false, left: true, right: false },  { up: false, down: true, left: false, right: false }],
                     [{ up: true, down: true, left: false, right: true },    { up: true, down: false, left: true, right: false },   { up: false, down: true, left: false, right: true },  { up: true, down: true, left: true, right: false }],
-                    [{ up: true, down: false, left: false, right: true },   { map: false, down: false, left: true, right: true },  { up: true, down: false, left: true, right: true },   { up: true, down: false, left: true, right: false }]
+                    [{ up: true, down: false, left: false, right: true },   { up: false, down: false, left: true, right: true },   { up: true, down: false, left: true, right: true },   { up: true, down: false, left: true, right: false }]
                 ]
             },
             {
@@ -411,8 +410,8 @@
                 start: { r: -1, c: 1 }, target: { r: 4, c: 2 },
                 grid: [
                     [{ up: false, down: true, left: false, right: true },  { up: true, down: true, left: true, right: false },    { up: false, down: true, left: false, right: true },   { up: false, down: true, left: true, right: false }],
-                    [{ up: true, down: false, left: false, right: true },  { up: true, down: false, left: true, right: true },    { up: true, down: true, left: true, right: false },    { up: true, down: true, left: false, right: false }],
-                    [{ up: false, down: true, left: false, right: true },  { up: false, down: true, left: true, right: false },   { up: true, down: false, left: false, right: true },   { up: true, down: false, left: true, right: false }],
+                    [{ up: true, down: false, left: false, right: true },  { up: true, down: true, left: true, right: true },     { up: true, down: true, left: true, right: false },    { up: true, down: true, left: false, right: false }],
+                    [{ up: false, down: true, left: false, right: true },  { up: true, down: true, left: true, right: false },    { up: true, down: false, left: false, right: true },   { up: true, down: false, left: true, right: false }],
                     [{ up: true, down: false, left: false, right: true },  { up: true, down: false, left: true, right: true },    { up: false, down: true, left: true, right: false },   { up: false, down: false, left: false, right: false }]
                 ]
             },
@@ -430,10 +429,10 @@
                 name: "8. Kat: Büyük Okyanus Sığınağı (FİNAL)", task: "⚠️ FİNAL: Kilitli kapıyı kır ve yavru kediyi kurtar!", theme: "flood5",
                 start: { r: -1, c: 0 }, target: { r: 4, c: 3 },
                 grid: [
-                    [{ up: true, down: true, left: false, right: true },   { up: false, down: true, left: true, right: true },    { up: false, down: true, left: true, right: true },    { up: false, down: true, left: true, right: false }],
-                    [{ up: true, down: true, left: false, right: true },   { up: true, down: true, left: true, right: true },     { up: true, down: true, left: true, right: true },     { up: true, down: false, left: true, right: false }],
-                    [{ up: true, down: true, left: false, right: true },   { up: true, down: true, left: true, right: true },     { up: true, down: true, left: true, right: true },     { up: false, down: true, left: true, right: false }],
-                    [{ up: true, down: false, left: false, right: true },  { up: true, down: false, left: true, right: true },    { up: true, down: false, left: true, right: true },    { up: true, down: true, left: true, right: false }]
+                    [{ up: true, down: true, left: true, right: true },   { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true }],
+                    [{ up: true, down: true, left: true, right: true },   { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true }],
+                    [{ up: true, down: true, left: true, right: true },   { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true }],
+                    [{ up: true, down: true, left: true, right: true },   { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true },    { up: true, down: true, left: true, right: true }]
                 ]
             }
         ];
