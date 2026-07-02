@@ -675,4 +675,101 @@
 
             if (currentLevel === levels.length - 1) {
                 modalTitle.innerText = "🏆 MUHTEŞEM ZAFER! 🏆";
-                modalDesc.innerText = "Tüm şifreleri kırdın, labirentleri aşt
+                modalDesc.innerText = "Tüm şifreleri kırdın, labirentleri aştın ve yaşlı dedeyi klimanın serinliğine ulaştırarak büyük kahraman oldun!";
+                nextBtn.innerText = "Baştan Başla";
+            } else {
+                modalTitle.innerText = "Kilit Açıldı! 🎉";
+                if(lvl.type === "grandpa") {
+                    modalDesc.innerText = "Harika! Yaşlı dedeyi kurtarma yolunda bir kat daha yaklaştın.";
+                } else {
+                    modalDesc.innerText = lvl.target.r === -1? "Harika! Yukarı çatı katına geçiş sağlandı!" : "Miyav! Başarıyla alt kata geçiş sağlandı.";
+                }
+                nextBtn.innerText = "Sonraki Seviye";
+            }
+            document.getElementById('winModal').style.display = 'flex';
+        }
+
+        function move(dr, dc) {
+            if(document.getElementById('lingoModal').style.display === 'flex' || document.getElementById('winModal').style.display === 'flex') return;
+
+            const lvl = levels[currentLevel];
+            const tR = pPos.r + dr;
+            const tC = pPos.c + dc;
+
+            if (tC < 0 || tC > 3 || tR < -1 || tR > 4) return;
+
+            const currentCell = (pPos.r >= 0 && pPos.r <= 3)? lvl.grid[pPos.r][pPos.c] : null;
+            const targetCell = (tR >= 0 && tR <= 3)? lvl.grid[tR][tC] : null;
+            let canPass = false;
+
+            if (dr === 0) {
+                if (pPos.r === -1 || pPos.r === 4) {
+                    canPass = true;
+                } else if (currentCell && targetCell) {
+                    if (dc === 1 && currentCell.right && targetCell.left) canPass = true;
+                    if (dc === -1 && currentCell.left && targetCell.right) canPass = true;
+                }
+            }
+            else if (dc === 0) {
+                if (pPos.r === -1 && tR === 0) {
+                    if (targetCell && targetCell.up) canPass = true;
+                }
+                else if (pPos.r === 0 && tR === -1) {
+                    if (currentCell && currentCell.up) canPass = true;
+                }
+                else if (pPos.r >= 0 && pPos.r <= 3 && tR >= 0 && tR <= 3) {
+                    if (dr === 1 && currentCell && currentCell.down && targetCell.up) canPass = true;
+                    if (dr === -1 && currentCell && currentCell.up && targetCell.down) canPass = true;
+                }
+                else if (pPos.r === 3 && tR === 4) {
+                    if (currentCell && currentCell.down) canPass = true;
+                }
+                else if (pPos.r === 4 && tR === 3) {
+                    if (targetCell && targetCell.down) canPass = true;
+                }
+            }
+
+            if (canPass) {
+                pPos.r = tR;
+                pPos.c = tC;
+                moveCount++;
+                document.getElementById('moves').innerText = `Hamle: ${moveCount}`;
+                updatePlayerPosition();
+            }
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'w', 's', 'a', 'd', 'W', 'S', 'A', 'D'].includes(e.key)) {
+                if(document.activeElement.id!== 'lingo-input') {
+                    e.preventDefault();
+                }
+            }
+
+            if(document.getElementById('lingoModal').style.display === 'flex' || document.getElementById('winModal').style.display === 'flex') return;
+
+            switch(e.key) {
+                case 'ArrowUp': case 'w': case 'W': move(-1, 0); break;
+                case 'ArrowDown': case 's': case 'S': move(1, 0); break;
+                case 'ArrowLeft': case 'a': case 'A': move(0, -1); break;
+                case 'ArrowRight': case 'd': case 'D': move(0, 1); break;
+            }
+        });
+
+        function loadNextLevel() {
+            document.getElementById('winModal').style.display = 'none';
+            currentLevel = (currentLevel + 1) % levels.length;
+            initGame();
+        }
+
+        function resetLevel() { initGame(); }
+        function skipLevel() {
+            document.getElementById('winModal').style.display = 'none';
+            document.getElementById('lingoModal').style.display = 'none';
+            currentLevel = (currentLevel + 1) % levels.length;
+            initGame();
+        }
+
+        document.addEventListener("DOMContentLoaded", initGame);
+    </script>
+</body>
+</html>
