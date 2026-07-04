@@ -78,4 +78,166 @@ h2 { font-size: 13px; text-align: center; color: var(--danger); margin-bottom: 1
 
 .pad { display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 24px 0 12px; }
 .row { display: flex; gap: 8px; }
-.btn { width: 56px; height: 56px; background: #fff; color
+.btn { width: 56px; height: 56px; background: #fff; color: var(--text); border: 1px solid var(--border); border-radius: 18px; font-size: 18px; font-weight: 800; box-shadow: 0 4px 12px rgba(0,0,0,0.03); cursor: pointer; transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center; }
+@media(prefers-color-scheme:dark) { .btn { background: #1e293b; } }
+.btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+.btn:active { transform: scale(0.94); background: rgba(0,0,0,0.02); }
+.sp { width: 56px; height: 56px; }
+
+.sys { display: flex; gap: 12px; margin-top: 16px; }
+.sys button { flex: 1; padding: 14px; border: 0; border-radius: 16px; font-weight: 700; font-size: 14px; color: #fff; background: #64748b; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(100, 116, 139, 0.2); }
+.sys button:hover { opacity: 0.9; transform: translateY(-1px); }
+.sys button.ok { background: var(--accent); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
+
+.tip { font-size: 12px; opacity: 0.5; text-align: center; margin-top: 12px; font-weight: 500; }
+
+.modal { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 99; padding: 16px; }
+.box { background: var(--panel); border: 1px solid var(--border); color: var(--text); padding: 32px 24px; border-radius: 28px; text-align: center; max-width: 360px; width: 100%; box-shadow: 0 30px 60px -15px rgba(0,0,0,0.3); animation: pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+@keyframes pop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.box h3 { color: var(--ok); margin-bottom: 8px; font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 700; }
+.box p { margin-bottom: 20px; opacity: 0.8; font-size: 14px; line-height: 1.5; }
+.box button { width: 100%; padding: 14px; background: var(--accent); color: #fff; border: 0; border-radius: 16px; font-weight: 700; font-size: 15px; cursor: pointer; transition: transform 0.2s; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
+.box button:active { transform: scale(0.97); }
+
+.lbox { width: 46px; height: 46px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 20px; border-radius: 12px; text-transform: uppercase; background: rgba(0,0,0,0.02); transition: all 0.2s; }
+.lin { width: 100%; padding: 14px; text-align: center; font-size: 22px; text-transform: uppercase; letter-spacing: 4px; border: 2px solid var(--border); border-radius: 16px; margin: 16px 0; background: rgba(0,0,0,0.02); color: var(--text); outline: none; font-weight: 800; transition: border-color 0.2s; font-family: 'Outfit', sans-serif; }
+.lin:focus { border-color: var(--accent); }
+.lin::placeholder { font-size: 16px; letter-spacing: 1px; opacity: 0.5; }
+</style>
+</head>
+<body>
+<div class="game" id="gc" tabindex="0">
+<h1 id="ln">Yükleniyor...</h1>
+<h2 id="lt">Görev: Çatıya tırman!</h2>
+<div class="status"><span id="li">Seviye: 1</span><span id="mv">Hamle: 0</span></div>
+<div class="wrap" onclick="gc.focus()">
+<div class="roof" id="rf"><div class="line"></div><div class="cloth" style="left:20%">👕</div><div class="cloth" style="left:45%">👗</div><div class="cloth" style="left:70%">🎽</div><div class="target" id="gp" style="display:none;left:45%">👴🔥</div></div>
+<div class="grid" id="gd"></div>
+<div class="base" id="bs"><div class="wave"></div><div class="target" id="kt" style="left:50%">🐱</div></div>
+<div class="man" id="pl">🏃‍♀️</div>
+</div>
+<div class="pad">
+<div class="row"><button class="btn" onclick="mv(-1,0)">▲</button></div>
+<div class="row"><button class="btn" onclick="mv(0,-1)">◀</button><div class="sp"></div><button class="btn" onclick="mv(0,1)">▶</button></div>
+<div class="row"><button class="btn" onclick="mv(1,0)">▼</button></div>
+</div>
+<div class="sys"><button onclick="rs()">Sıfırla</button><button class="ok" onclick="sk()">Atla</button></div>
+<p class="tip">WASD veya Yön Tuşları</p>
+</div>
+
+<div class="modal" id="wm"><div class="box"><h3 id="mt">Harika!</h3><p id="md">Devam!</p><button onclick="nx()">Sonraki Seviye</button></div></div>
+<div class="modal" id="lm"><div class="box"><h3>🔐 Kelime Kilidi</h3><p id="lh" style="color:var(--danger);font-weight:700;font-size:14px;margin-bottom:10px"></p><div id="lg" style="display:flex;flex-direction:column;gap:6px;align-items:center;margin:16px 0"></div><input id="lipt" class="lin" placeholder="KELİME YAZIN" maxlength="5" onkeydown="if(event.key==='Enter')ck()"><button class="ok" style="width:100%;padding:14px;border:0;border-radius:16px;color:#fff;font-weight:700;font-size:15px;" onclick="ck()">Kelimeyi Dene</button><p id="le" style="color:var(--danger);font-size:13px;margin-top:10px;font-weight:700"></p></div></div>
+
+<script>
+const LV=[
+{name:"1. Kat: Yağmurlu Çatı",task:"Görev: Yukarı tırman!",theme:"",type:"roof",s:{r:3,c:3},t:{r:-1,c:0},g:[
+[{u:1,d:0,l:0,r:1},{u:0,d:0,l:1,r:1},{u:0,d:1,l:1,r:0},{u:0,d:0,l:0,r:0}],
+[{u:0,d:1,l:0,r:0},{u:0,d:0,l:0,r:1},{u:1,d:1,l:1,r:0},{u:0,d:1,l:0,r:0}],
+[{u:1,d:0,l:0,r:1},{u:0,d:1,l:1,r:0},{u:1,d:0,l:0,r:1},{u:1,d:1,l:1,r:0}],
+[{u:0,d:0,l:0,r:1},{u:1,d:0,l:1,r:0},{u:0,d:0,l:0,r:1},{u:1,d:0,l:1,r:0}]]},
+{name:"2. Kat: Gizemli Gece",task:"Görev: Yukarı!",theme:"night",type:"roof",s:{r:3,c:0},t:{r:-1,c:2},g:[
+[{u:0,d:1,l:0,r:1},{u:0,d:0,l:1,r:0},{u:1,d:1,l:0,r:1},{u:0,d:0,l:1,r:0}],
+[{u:1,d:0,l:0,r:1},{u:0,d:1,l:1,r:1},{u:1,d:0,l:1,r:0},{u:0,d:1,l:0,r:0}],
+[{u:0,d:1,l:0,r:0},{u:1,d:0,l:0,r:1},{u:0,d:1,l:1,r:1},{u:1,d:0,l:1,r:0}],
+[{u:1,d:0,l:0,r:1},{u:0,d:0,l:1,r:1},{u:1,d:0,l:1,r:0},{u:0,d:0,l:0,r:0}]]},
+{name:"3. Kat: Siber Kule",task:"Görev: Hackle!",theme:"cyber",type:"roof",s:{r:3,c:3},t:{r:-1,c:3},g:[
+[{u:0,d:1,l:0,r:1},{u:0,d:0,l:1,r:1},{u:0,d:1,l:1,r:1},{u:1,d:0,l:1,r:0}],
+[{u:1,d:1,l:0,r:0},{u:0,d:1,l:0,r:1},{u:1,d:0,l:1,r:0},{u:0,d:1,l:0,r:0}],
+[{u:1,d:1,l:0,r:1},{u:1,d:0,l:1,r:0},{u:0,d:1,l:0,r:1},{u:1,d:1,l:1,r:0}],
+[{u:1,d:0,l:0,r:1},{u:0,d:0,l:1,r:1},{u:1,d:0,l:1,r:1},{u:1,d:0,l:1,r:0}]]},
+{name:"4. Kat: Su Baskını",task:"⚠ Aşağı in, kediyi kurtar!",theme:"flood1",type:"base",s:{r:-1,c:0},t:{r:4,c:3},g:[
+[{u:1,d:1,l:0,r:1},{u:0,d:1,l:1,r:0},{u:0,d:1,l:0,r:1},{u:0,d:0,l:1,r:0}],
+[{u:1,d:1,l:0,r:0},{u:1,d:0,l:0,r:1},{u:1,d:1,l:1,r:0},{u:0,d:1,l:0,r:0}],
+[{u:1,d:0,l:0,r:1},{u:0,d:1,l:1,r:0},{u:1,d:1,l:0,r:1},{u:1,d:1,l:1,r:0}],
+[{u:0,d:0,l:0,r:1},{u:1,d:0,l:1,r:1},{u:1,d:0,l:1,r:0},{u:1,d:1,l:0,r:0}]]},
+{name:"5. Kat: Sarnıç",task:"⚠ Aşağı!",theme:"flood2",type:"base",s:{r:-1,c:2},t:{r:4,c:0},g:[
+[{u:0,d:1,l:0,r:1},{u:0,d:1,l:1,r:1},{u:1,d:1,l:1,r:0},{u:0,d:0,l:0,r:0}],
+[{u:1,d:1,l:0,r:0},{u:1,d:0,l:0,r:1},{u:1,d:1,l:1,r:0},{u:0,d:1,l:0,r:0}],
+[{u:1,d:0,l:0,r:1},{u:0,d:1,l:1,r:1},{u:1,d:0,l:1,r:0},{u:1,d:1,l:0,r:0}],
+[{u:0,d:1,l:0,r:1},{u:1,d:0,l:1,r:1},{u:0,d:0,l:1,r:1},{u:1,d:0,l:1,r:0}]]},
+{name:"6. Kat: Lab",task:"⚠ Aşağı!",theme:"flood3",type:"base",s:{r:-1,c:1},t:{r:4,c:2},g:[
+[{u:0,d:1,l:0,r:1},{u:1,d:1,l:1,r:0},{u:0,d:1,l:0,r:1},{u:0,d:1,l:1,r:0}],
+[{u:1,d:0,l:0,r:1},{u:1,d:1,l:1,r:1},{u:1,d:1,l:1,r:0},{u:1,d:1,l:0,r:0}],
+[{u:0,d:1,l:0,r:1},{u:1,d:1,l:1,r:0},{u:1,d:0,l:0,r:1},{u:1,d:0,l:1,r:0}],
+[{u:1,d:0,l:0,r:1},{u:1,d:0,l:1,r:1},{u:0,d:1,l:1,r:0},{u:0,d:0,l:0,r:0}]]},
+{name:"7. Kat: Metro",task:"⚠ Aşağı!",theme:"flood4",type:"base",s:{r:-1,c:3},t:{r:4,c:1},g:[
+[{u:0,d:1,l:0,r:1},{u:0,d:1,l:1,r:0},{u:0,d:1,l:0,r:1},{u:1,d:1,l:1,r:0}],
+[{u:1,d:1,l:0,r:1},{u:1,d:0,l:1,r:1},{u:1,d:0,l:1,r:0},{u:1,d:1,l:0,r:0}],
+[{u:1,d:0,l:0,r:1},{u:0,d:1,l:1,r:1},{u:0,d:1,l:1,r:1},{u:1,d:1,l:1,r:0}],
+[{u:0,d:0,l:0,r:1},{u:1,d:1,l:1,r:0},{u:1,d:0,l:0,r:1},{u:1,d:0,l:1,r:0}]]},
+{name:"8. Kat: Sığınak",task:"⚠ Güvenli bölge!",theme:"flood5",type:"base",s:{r:-1,c:0},t:{r:4,c:3},g:[
+[{u:1,d:1,l:0,r:1},{u:0,d:0,l:1,r:1},{u:0,d:1,l:1,r:0},{u:0,d:1,l:0,r:0}],
+[{u:1,d:0,l:0,r:0},{u:0,d:1,l:0,r:1},{u:1,d:0,l:1,r:1},{u:1,d:1,l:1,r:0}],
+[{u:0,d:1,l:0,r:1},{u:1,d:1,l:1,r:0},{u:0,d:1,l:0,r:0},{u:1,d:0,l:0,r:0}],
+[{u:1,d:0,l:0,r:1},{u:1,d:0,l:1,r:1},{u:1,d:0,l:1,r:0},{u:0,d:1,l:0,r:0}]]},
+{name:"9. Kat: Sıcak",task:"🥵 Dede yukarıda!",theme:"hot",type:"grandpa",s:{r:3,c:0},t:{r:-1,c:2},g:[
+[{u:0,d:1,l:0,r:1},{u:0,d:0,l:1,r:1},{u:1,d:1,l:1,r:0},{u:0,d:0,l:0,r:0}],
+[{u:1,d:0,l:0,r:1},{u:0,d:1,l:1,r:0},{u:1,d:0,l:0,r:1},{u:0,d:1,l:1,r:0}],
+[{u:0,d:1,l:0,r:0},{u:1,d:1,l:0,r:1},{u:0,d:1,l:1,r:1},{u:1,d:0,l:1,r:0}],
+[{u:1,d:0,l:0,r:1},{u:1,d:0,l:1,r:0},{u:1,d:0,l:0,r:1},{u:0,d:0,l:1,r:0}]]},
+{name:"10. Kat: Çöl",task:"🥵 Klima bozuk!",theme:"hot",type:"grandpa",s:{r:3,c:2},t:{r:-1,c:1},g:[
+[{u:0,d:1,l:0,r:1},{u:1,d:1,l:1,r:0},{u:0,d:1,l:0,r:1},{u:0,d:0,l:1,r:0}],
+[{u:1,d:1,l:0,r:0},{u:1,d:0,l:0,r:1},{u:1,d:0,l:1,r:1},{u:0,d:1,l:1,r:0}],
+[{u:1,d:0,l:0,r:1},{u:0,d:1,l:1,r:0},{u:0,d:1,l:0,r:1},{u:1,d:1,l:1,r:0}],
+[{u:0,d:0,l:0,r:1},{u:1,d:0,l:1,r:1},{u:1,d:0,l:1,r:0},{u:1,d:0,l:0,r:0}]]},
+{name:"11. Kat: FİNAL",task:"🔥 Şifreyi kır!",theme:"hot",type:"grandpa",s:{r:3,c:3},t:{r:-1,c:2},g:[
+[{u:0,d:1,l:0,r:1},{u:0,d:1,l:1,r:0},{u:1,d:1,l:0,r:1},{u:0,d:0,l:1,r:0}],
+[{u:1,d:0,l:0,r:0},{u:1,d:1,l:0,r:1},{u:1,d:0,l:1,r:0},{u:0,d:1,l:0,r:0}],
+[{u:0,d:1,l:0,r:1},{u:1,d:0,l:1,r:0},{u:0,d:1,l:0,r:1},{u:1,d:1,l:1,r:0}],
+[{u:1,d:0,l:0,r:1},{u:0,d:0,l:1,r:1},{u:1,d:0,l:1,r:1},{u:1,d:0,l:1,r:0}]]}
+];
+
+const WORDS_POOL = {
+    cyber: ["ÇATI", "SİBER", "VERİ", "KODLA", "SİTE"],
+    cat: ["MİYAV", "PATİ", "KEDİ", "YUMAK", "MAMA"],
+    hot: ["SICAK", "GÜNEŞ", "YANGIN", "TERLİ", "KLİMA"]
+};
+
+let cl=0,mc=0,pp={r:0,c:0},sw="",at=0; const gd=document.getElementById('gd'),pl=document.getElementById('pl'),rf=document.getElementById('rf'),bs=document.getElementById('bs'),kt=document.getElementById('kt'),gp=document.getElementById('gp');
+function ig(){gd.innerHTML='';const L=LV[cl];pp={...L.s};mc=0;ln.textContent=L.name;lt.textContent=L.task;li.textContent=`Seviye: ${cl+1}/${LV.length}`;mv.textContent=`Hamle: 0`;document.body.className='';if(L.theme)document.body.classList.add('theme-'+L.theme);bs.style.display=L.type==='base'?'block':'none';rf.style.borderRadius=L.type==='base'?'20px 20px 0 0':'20px 20px 0 0';gd.style.borderRadius=L.type==='base'?'0':'0 0 20px 20px';document.querySelectorAll('.cloth').forEach(e=>e.style.display=L.type==='roof'?'block':'none');document.querySelector('.line').style.display=L.type==='roof'?'block':'none';gp.style.display=L.type==='grandpa'?'block':'none';if(L.type==='grandpa')gp.style.left=`calc(${12.5+L.t.c*25}% - 16px)`;if(L.type==='base')kt.style.left=`calc(${12.5+L.t.c*25}% - 16px)`;for(let r=0;r<4;r++)for(let c=0;c<4;c++){const ce=L.g[r][c],d=document.createElement('div');d.className='room'+(c===0?' l':'')+(c===3?' r':'')+(r===0?' t':'')+(r===3?' b':'');d.dataset.r=r;d.dataset.c=c;if(ce.u){const l=document.createElement('div');l.className='ladder';d.appendChild(l);const t=document.createElement('div');t.className='trap t';d.appendChild(t)}if(ce.d){const t=document.createElement('div');t.className='trap b';d.appendChild(t)}if(ce.r&&c<3){const dr=document.createElement('div');dr.className='door r';d.appendChild(dr)}if(ce.l&&c>0){const dl=document.createElement('div');dl.className='door l';d.appendChild(dl)}gd.appendChild(d)}up();gc.focus()}
+function up(){const L=LV[cl];if(pp.r===L.t.r&&pp.c===L.t.c){rp(L.t.r,L.t.c);setTimeout(()=>{[2,7,10].includes(cl)?st():sm(L)},180);return}const p=pp.r===-1?rf:pp.r===4?bs:document.querySelector(`[data-r="${pp.r}"][data-c="${pp.c}"]`);p.appendChild(pl);pl.style.top=pp.r===-1?'30px':pp.r===4?'16px':'20px';pl.style.left=`calc(${pp.r<0||pp.r>3?12.5+pp.c*25:50}% - 22px)`}
+function rp(r,c){const p=r===-1?rf:bs;p.appendChild(pl);pl.style.top=r===-1?'30px':'16px';pl.style.left=`calc(${12.5+c*25}% - 22px)`}
+function mv(dr,dc){if(lm.style.display==='flex'||wm.style.display==='flex')return;const L=LV[cl],tr=pp.r+dr,tc=pp.c+dc;if(tc<0||tc>3||tr<-1||tr>4)return;const cc=pp.r>=0&&pp.r<4?L.g[pp.r][pp.c]:null,tc2=tr>=0&&tr<4?L.g[tr][tc]:null;let ok=0;if(dr===0){ok=pp.r===-1||pp.r===4||(cc&&tc2&&((dc===1&&cc.r&&tc2.l)||(dc===-1&&cc.l&&tc2.r)))}else{if(pp.r===-1&&tr===0)ok=tc2&&tc2.u;else if(pp.r===0&&tr===-1)ok=cc&&cc.u;else if(pp.r>=0&&pp.r<4&&tr>=0&&tr<4)ok=dr===1?cc&&cc.d&&tc2.u:cc&&cc.u&&tc2.d;else if(pp.r===3&&tr===4)ok=cc&&cc.d;else if(pp.r===4&&tr===3)ok=tc2&&tc2.d}if(ok){pp.r=tr;pp.c=tc;mv.textContent=`Hamle: ${++mc}`;up()}}
+
+function st(){
+    let pool = [];
+    let h = "";
+    if(cl === 2) { pool = WORDS_POOL.cyber; h = "Siber Çatı Teması"; }
+    else if(cl === 7) { pool = WORDS_POOL.cat; h = "Kedi Teması"; }
+    else { pool = WORDS_POOL.hot; h = "Sıcaklık Teması"; }
+    
+    const w = pool[Math.floor(Math.random() * pool.length)];
+    
+    sw=w;at=0;
+    lh.textContent=`${w.length} Harfli Bir KELİME Girin (${h})`;
+    le.textContent='';lipt.value='';lipt.maxLength=w.length;lg.innerHTML='';
+    for(let i=0;i<5;i++){
+        const r=document.createElement('div');
+        r.style.display='flex';
+        r.style.gap='6px';
+        for(let j=0;j<w.length;j++){
+            const b=document.createElement('div');
+            b.className='lbox';
+            b.id=`b${i}${j}`;
+            // İlk satırın ilk hücresine ilk harfi ipucu olarak yazdırıyoruz
+            if(i===0 && j===0) {
+                b.textContent = w[0];
+                b.style.background = 'rgba(0,0,0,0.08)';
+            }
+            r.appendChild(b)
+        }
+        lg.appendChild(r)
+    }
+    lm.style.display='flex';lipt.focus()
+}
+
+function ck(){const g=lipt.value.toLocaleUpperCase('tr-TR').trim();if(g.length!==sw.length){le.textContent=`${sw.length} harfli bir kelime yazmalısınız!`;return}le.textContent='';const s=[...sw],a=[...g],st=Array(sw.length).fill(0);for(let i=0;i<sw.length;i++)if(a[i]===s[i]){st[i]=2;s[i]=a[i]=null}for(let i=0;i<sw.length;i++)if(a[i]&&s.includes(a[i])){st[i]=1;s[s.indexOf(a[i])]=null}for(let i=0;i<sw.length;i++){const b=document.getElementById(`b${at}${i}`);b.textContent=g[i];b.style.background=st[i]===2?'#10b981':st[i]===1?'#f59e0b':'#64748b';b.style.color='#fff';b.style.borderColor='transparent'}at++;lipt.value='';if(g===sw){setTimeout(()=>{lm.style.display='none';sm(LV[cl])},500)}else if(at Pacman>=5){le.textContent='Doğru kelimeyi bulamadınız, tekrar deneyin...';setTimeout(st,1500)}else{const nb=document.getElementById(`b${at}0`);if(nb){nb.textContent=sw[0];nb.style.background='rgba(0,0,0,0.08)'}}}
+function sm(L){mt.textContent=cl===LV.length-1?'🏆 ZAFER!':'Kilit Açıldı!';md.textContent=cl===LV.length-1?'Tüm seviyeler başarıyla bitti!':L.type==='grandpa'?'Dedeye yaklaştın!':L.t.r===-1?'Çatıya çıktın!':'Aşağı indin!';wm.style.display='flex'}
+function nx(){wm.style.display='none';cl=(cl+1)%LV.length;ig()}
+function rs(){ig()}function sk(){wm.style.display='none';lm.style.display='none';cl=(cl+1)%LV.length;ig()}
+window.addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'].includes(e.key)&&document.activeElement!==lipt)e.preventDefault();if(lm.style.display==='flex'||wm.style.display==='flex')return;const k=e.key;if(k==='ArrowUp'||k==='w'||k==='W')mv(-1,0);if(k==='ArrowDown'||k==='s'||k==='S')mv(1,0);if(k==='ArrowLeft'||k==='a'||k==='A')mv(0,-1);if(k==='ArrowRight'||k==='d'||k==='D')mv(0,1)});
+document.addEventListener('DOMContentLoaded',ig);
+</script>
+</body>
+</html>
