@@ -47,7 +47,7 @@ h2 { font-size: 13px; text-align: center; color: var(--danger); margin-bottom: 1
 .status { display: flex; justify-content: space-between; background: rgba(0,0,0,0.03); padding: 10px 16px; border-radius: 16px; font-size: 13px; font-weight: 800; margin-bottom: 16px; border: 1px solid rgba(0,0,0,0.02); }
 @media(prefers-color-scheme:dark) { .status { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.02); } }
 
-.wrap { position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1); }
+.wrap { position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1); min-height: 416px; }
 .roof { height: 90px; background: linear-gradient(180deg, var(--roof), rgba(0,0,0,0.02)); border: 1px solid var(--border); border-bottom: 0; border-radius: 20px 20px 0 0; position: relative; overflow: hidden; }
 .line { position: absolute; bottom: 24px; left: 5%; width: 90%; height: 2px; background: rgba(0,0,0,0.1); border-radius: 2px; }
 @media(prefers-color-scheme:dark) { .line { background: rgba(255,255,255,0.1); } }
@@ -63,12 +63,12 @@ h2 { font-size: 13px; text-align: center; color: var(--danger); margin-bottom: 1
 .wave { position: absolute; inset: 0; background: linear-gradient(0deg, #0284c7 60%, #38bdf8); opacity: 0.85; animation: wave 4s linear infinite; width: 200%; }
 @keyframes wave { 0% { transform: translateX(0); } 100% { transform: translateX(-50%) ;} }
 
-.room { border: 1px dashed var(--wall); position: relative; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+.room { border: 1px dashed var(--wall); position: relative; display: flex; align-items: center; justify-content: center; transition: background 0.2s; height: 84px; }
 .room.l { border-left: 1px solid var(--border); } .room.r { border-right: 1px solid var(--border); }
 .room.t { border-top: 1px solid var(--border); } .room.b { border-bottom: 1px solid var(--border); }
 
-.ladder { position: absolute; width: 18px; height: 100%; left: 50%; transform: translateX(-50%); background: repeating-linear-gradient(var(--ladder) 0 4px, transparent 4px 14px); border-left: 3px solid var(--ladder); border-right: 3px solid var(--ladder); opacity: 0.85; }
-.door { position: absolute; width: 8px; height: 42px; background: var(--door); bottom: 0; border-radius: 4px 4px 0 0; opacity: 0.9; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.ladder { position: absolute; width: 18px; height: 100%; left: 50%; transform: translateX(-50%); background: repeating-linear-gradient(var(--ladder) 0 4px, transparent 4px 14px); border-left: 3px solid var(--ladder); border-right: 3px solid var(--ladder); opacity: 0.85; z-index: 1; }
+.door { position: absolute; width: 8px; height: 42px; background: var(--door); bottom: 21px; border-radius: 4px 4px 4px 4px; opacity: 0.9; box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 1; }
 .door.l { left: -4px; } .door.r { right: -4px; }
 .trap { position: absolute; width: 32px; height: 6px; background: #0f172a; border: 1px solid #e2e8f0; border-radius: 3px; left: 50%; transform: translateX(-50%); z-index: 2; }
 .trap.t { top: -3px; } .trap.b { bottom: -3px; }
@@ -189,15 +189,16 @@ const LV=[
 ];
 
 const WORDS_POOL = {
-    cyber: ["ÇATI", "FARE", "VERİ", "SİTE"],
-    cat: ["MAMA", "PATİ", "KEDİ", "PİSİ", "MAMA"],
-    hot: ["SICAK", "GÜNEŞ", "YANIK", "TERLİ", "KLİMA"]
+    cyber: ["ÇATI", "SİBER", "VERİ", "KODLA", "SİTE"],
+    cat: ["MİYAV", "PATİ", "KEDİ", "YUMAK", "MAMA"],
+    hot: ["SICAK", "GÜNEŞ", "YANGIN", "TERLİ", "KLİMA"]
 };
 
-let cl=0,mc=0,pp={r:0,c:0},sw="",at=0; 
-const gd=document.getElementById('gd'),pl=document.getElementById('pl'),rf=document.getElementById('rf'),bs=document.getElementById('bs'),kt=document.getElementById('kt'),gp=document.getElementById('gp'),wp=document.getElementById('wp'),gc=document.getElementById('gc');
+let cl=0,mc=0,pp={r:0,c:0},sw="",at=0;
 
 function ig(){
+    const gd=document.getElementById('gd'),pl=document.getElementById('pl'),rf=document.getElementById('rf'),bs=document.getElementById('bs'),kt=document.getElementById('kt'),gp=document.getElementById('gp'),gc=document.getElementById('gc');
+    if(!gd) return;
     gd.innerHTML='';const L=LV[cl];pp={...L.s};mc=0;
     document.getElementById('ln').textContent=L.name;
     document.getElementById('lt').textContent=L.task;
@@ -227,8 +228,17 @@ function ig(){
     if(gc) gc.focus();
 }
 
-function up(){const L=LV[cl];if(pp.r===L.t.r&&pp.c===L.t.c){rp(L.t.r,L.t.c);setTimeout(()=>{[2,7,10].includes(cl)?st():sm(L)},180);return}const p=pp.r===-1?rf:pp.r===4?bs:document.querySelector(`[data-r="${pp.r}"][data-c="${pp.c}"]`);p.appendChild(pl);pl.style.top=pp.r===-1?'30px':pp.r===4?'16px':'20px';pl.style.left=`calc(${pp.r<0||pp.r>3?12.5+pp.c*25:50}% - 22px)`}
-function rp(r,c){const p=r===-1?rf:bs;p.appendChild(pl);pl.style.top=r===-1?'30px':'16px';pl.style.left=`calc(${12.5+c*25}% - 22px)`}
+function up(){
+    const gd=document.getElementById('gd'),pl=document.getElementById('pl'),rf=document.getElementById('rf'),bs=document.getElementById('bs');
+    const L=LV[cl];
+    if(pp.r===L.t.r&&pp.c===L.t.c){rp(L.t.r,L.t.c);setTimeout(()=>{[2,7,10].includes(cl)?st():sm(L)},180);return}
+    const p=pp.r===-1?rf:pp.r===4?bs:document.querySelector(`[data-r="${pp.r}"][data-c="${pp.c}"]`);
+    if(p && pl){p.appendChild(pl);pl.style.top=pp.r===-1?'30px':pp.r===4?'16px':'20px';pl.style.left=`calc(${pp.r<0||pp.r>3?12.5+pp.c*25:50}% - 22px)`}
+}
+function rp(r,c){
+    const pl=document.getElementById('pl'),rf=document.getElementById('rf'),bs=document.getElementById('bs');
+    const p=r===-1?rf:bs;if(p && pl){p.appendChild(pl);pl.style.top=r===-1?'30px':'16px';pl.style.left=`calc(${12.5+c*25}% - 22px)`}
+}
 function mv(dr,dc){if(document.getElementById('lm').style.display==='flex'||document.getElementById('wm').style.display==='flex')return;const L=LV[cl],tr=pp.r+dr,tc=pp.c+dc;if(tc<0||tc>3||tr<-1||tr>4)return;const cc=pp.r>=0&&pp.r<4?L.g[pp.r][pp.c]:null,tc2=tr>=0&&tr<4?L.g[tr][tc]:null;let ok=0;if(dr===0){ok=pp.r===-1||pp.r===4||(cc&&tc2&&((dc===1&&cc.r&&tc2.l)||(dc===-1&&cc.l&&tc2.r)))}else{if(pp.r===-1&&tr===0)ok=tc2&&tc2.u;else if(pp.r===0&&tr===-1)ok=cc&&cc.u;else if(pp.r>=0&&pp.r<4&&tr>=0&&tr<4)ok=dr===1?cc&&cc.d&&tc2.u:cc&&cc.u&&tc2.d;else if(pp.r===3&&tr===4)ok=cc&&cc.d;else if(pp.r===4&&tr===3)ok=tc2&&tc2.d}if(ok){pp.r=tr;pp.c=tc;document.getElementById('mv').textContent=`Hamle: ${++mc}`;up()}}
 
 function st(){
@@ -257,7 +267,6 @@ function sm(L){document.getElementById('mt').textContent=cl===LV.length-1?'🏆 
 function nx(){document.getElementById('wm').style.display='none';cl=(cl+1)%LV.length;ig()}
 function rs(){ig()}function sk(){document.getElementById('wm').style.display='none';document.getElementById('lm').style.display='none';cl=(cl+1)%LV.length;ig()}
 window.addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'].includes(e.key)&&document.activeElement!==document.getElementById('lipt'))e.preventDefault();if(document.getElementById('lm').style.display==='flex'||document.getElementById('wm').style.display==='flex')return;const k=e.key;if(k==='ArrowUp'||k==='w'||k==='W')mv(-1,0);if(k==='ArrowDown'||k==='s'||k==='S')mv(1,0);if(k==='ArrowLeft'||k==='a'||k==='A')mv(0,-1);if(k==='ArrowRight'||k==='d'||k==='D')mv(0,1)});
-if(wp) wp.onclick = function(){ if(gc) gc.focus(); };
 document.addEventListener('DOMContentLoaded',ig);
 </script>
 </body>
